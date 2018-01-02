@@ -1,0 +1,92 @@
+[gd_scene load_steps=5 format=1]
+
+[ext_resource path="res://paddle/paddle.png" type="Texture" id=1]
+
+[sub_resource type="SegmentShape2D" id=1]
+
+custom_solver_bias = 0.0
+a = Vector2( -127.986, -26.3011 )
+b = Vector2( 126.402, -26.3011 )
+
+[sub_resource type="SegmentShape2D" id=2]
+
+custom_solver_bias = 0.0
+a = Vector2( -188.71, 23.8601 )
+b = Vector2( -129.292, -26.2544 )
+
+[sub_resource type="SegmentShape2D" id=3]
+
+custom_solver_bias = 0.0
+a = Vector2( 130.583, -25.3542 )
+b = Vector2( 187.9, 23.56 )
+
+[node name="paddle" type="KinematicBody2D"]
+
+input/pickable = true
+collision/layers = 1
+collision/mask = 1
+collision/margin = 0.08
+
+[node name="sprite" type="Sprite" parent="."]
+
+transform/scale = Vector2( 0.75, 0.5 )
+texture = ExtResource( 1 )
+
+[node name="top_area" type="Area2D" parent="sprite"]
+
+editor/display_folded = true
+input/pickable = true
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 1.33333, 0, 0, 2, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+
+[node name="collider" type="CollisionShape2D" parent="sprite/top_area"]
+
+transform/scale = Vector2( 1.33333, 2 )
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+
+[node name="left_bumper" type="Area2D" parent="sprite"]
+
+editor/display_folded = true
+input/pickable = true
+shapes/0/shape = SubResource( 2 )
+shapes/0/transform = Matrix32( 1.33333, 0, 0, 2, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+
+[node name="collider" type="CollisionShape2D" parent="sprite/left_bumper"]
+
+transform/scale = Vector2( 1.33333, 2 )
+shape = SubResource( 2 )
+trigger = false
+_update_shape_index = 0
+
+[node name="right_bumper" type="Area2D" parent="sprite"]
+
+editor/display_folded = true
+input/pickable = true
+shapes/0/shape = SubResource( 3 )
+shapes/0/transform = Matrix32( 1.33333, 0, 0, 2, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+
+[node name="collider" type="CollisionShape2D" parent="sprite/right_bumper"]
+
+transform/scale = Vector2( 1.33333, 2 )
+shape = SubResource( 3 )
+trigger = false
+_update_shape_index = 0
+
+
