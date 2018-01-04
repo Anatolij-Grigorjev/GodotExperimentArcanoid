@@ -61,7 +61,6 @@ texture = ExtResource( 2 )
 
 [node name="sprite_shadow" type="Sprite" parent="."]
 
-transform/rot = 143.987
 transform/scale = Vector2( 0.25, 0.25 )
 texture = ExtResource( 2 )
 

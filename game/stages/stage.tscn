@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=1]
+
+[ext_resource path="res://ball/ball.tscn" type="PackedScene" id=1]
+[ext_resource path="res://paddle/paddle.tscn" type="PackedScene" id=2]
+
+[node name="stage" type="Node2D"]
+
+[node name="ball" parent="." instance=ExtResource( 1 )]
+
+transform/pos = Vector2( 400, 200 )
+
+[node name="paddle" parent="." instance=ExtResource( 2 )]
+
+transform/pos = Vector2( 530, 500 )
+
+

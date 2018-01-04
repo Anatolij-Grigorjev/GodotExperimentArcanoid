@@ -3,23 +3,20 @@
 [ext_resource path="res://paddle/paddle.gd" type="Script" id=1]
 [ext_resource path="res://paddle/paddle.png" type="Texture" id=2]
 
-[sub_resource type="SegmentShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=6]
 
 custom_solver_bias = 0.0
-a = Vector2( -127.986, -26.3011 )
-b = Vector2( 126.402, -26.3011 )
+extents = Vector2( 170, 50 )
 
-[sub_resource type="SegmentShape2D" id=2]
-
-custom_solver_bias = 0.0
-a = Vector2( -188.71, 23.8601 )
-b = Vector2( -129.292, -26.2544 )
-
-[sub_resource type="SegmentShape2D" id=3]
+[sub_resource type="ConvexPolygonShape2D" id=4]
 
 custom_solver_bias = 0.0
-a = Vector2( 130.583, -25.3542 )
-b = Vector2( 187.9, 23.56 )
+points = Vector2Array( -250, 50, -170, -50, -170, 50 )
+
+[sub_resource type="ConvexPolygonShape2D" id=5]
+
+custom_solver_bias = 0.0
+points = Vector2Array( 170, 50, 170, -50, 250, 50 )
 
 [node name="paddle" type="KinematicBody2D"]
 
@@ -36,10 +33,9 @@ texture = ExtResource( 2 )
 
 [node name="top_area" type="Area2D" parent="sprite"]
 
-editor/display_folded = true
 input/pickable = true
-shapes/0/shape = SubResource( 1 )
-shapes/0/transform = Matrix32( 1.33333, 0, 0, 2, 0, 0 )
+shapes/0/shape = SubResource( 6 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
 gravity = 98.0
@@ -48,17 +44,15 @@ angular_damp = 1.0
 
 [node name="collider" type="CollisionShape2D" parent="sprite/top_area"]
 
-transform/scale = Vector2( 1.33333, 2 )
-shape = SubResource( 1 )
+shape = SubResource( 6 )
 trigger = false
 _update_shape_index = 0
 
 [node name="left_bumper" type="Area2D" parent="sprite"]
 
-editor/display_folded = true
 input/pickable = true
-shapes/0/shape = SubResource( 2 )
-shapes/0/transform = Matrix32( 1.33333, 0, 0, 2, 0, 0 )
+shapes/0/shape = SubResource( 4 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
 gravity = 98.0
@@ -67,17 +61,15 @@ angular_damp = 1.0
 
 [node name="collider" type="CollisionShape2D" parent="sprite/left_bumper"]
 
-transform/scale = Vector2( 1.33333, 2 )
-shape = SubResource( 2 )
+shape = SubResource( 4 )
 trigger = false
 _update_shape_index = 0
 
 [node name="right_bumper" type="Area2D" parent="sprite"]
 
-editor/display_folded = true
 input/pickable = true
-shapes/0/shape = SubResource( 3 )
-shapes/0/transform = Matrix32( 1.33333, 0, 0, 2, 0, 0 )
+shapes/0/shape = SubResource( 5 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
 gravity = 98.0
@@ -86,9 +78,14 @@ angular_damp = 1.0
 
 [node name="collider" type="CollisionShape2D" parent="sprite/right_bumper"]
 
-transform/scale = Vector2( 1.33333, 2 )
-shape = SubResource( 3 )
+shape = SubResource( 5 )
 trigger = false
 _update_shape_index = 0
+
+[connection signal="area_enter" from="sprite/top_area" to="." method="_on_area_enter"]
+
+[connection signal="area_enter" from="sprite/left_bumper" to="." method="_on_area_enter"]
+
+[connection signal="area_enter" from="sprite/right_bumper" to="." method="_on_area_enter"]
 
 

@@ -5,7 +5,7 @@ const COLOR_WHITE = Color(1.0, 1.0, 1.0, 0.5)
 const COLOR_RED = Color(1.0, 0.1, 0.1, 0.5)
 
 
-var BASE_BALL_SPEED = 300 #base ball speed
+var BASE_BALL_SPEED = 150 #base ball speed
 var BALL_SPEED_INCREASE = 1.1 #ball speed increase when bouncing
 
 const COLORS = [
@@ -34,7 +34,14 @@ func _ready():
 	#initialize random direction
 	direction = Vector2(rand_range(-1.0, 1.0), rand_range(-1.0, 1.0))
 	speed = BASE_BALL_SPEED
-	screen_rect = get_viewport_rect().size
+	screen_rect = get_viewport_rect()
+	
+	var sprite = get_node("sprite")
+	var tex = sprite.get_texture()
+	var extents = (tex.get_size() * sprite.get_scale()) * 0.5
+	
+	screen_rect.pos += extents
+	screen_rect.end -= extents
 	
 	set_process(true)
 
@@ -42,16 +49,16 @@ func _ready():
 func _process(delta):
 	
 	#hit the left wall going left, rebound as if hit right border of something
-	if (get_global_pos().x < 0 and direction.x <= 0):
+	if (get_global_pos().x < screen_rect.pos.x and direction.x <= 0):
 		hit_something(RIGHT)
 	#hit right wall going right, rebound as if hit left border of something
-	if (get_global_pos().x > screen_rect.x and direction.x >= 0):
+	if (get_global_pos().x > screen_rect.end.x and direction.x >= 0):
 		hit_something(LEFT)
 	#hit top wall going up, rebound as if hit bottom border of something
-	if (get_global_pos().y < 0 and direction.y <= 0):
+	if (get_global_pos().y < screen_rect.pos.y and direction.y <= 0):
 		hit_something(BOTTOM)
 	#hit bottom wall goind down, rbound as if hit top border of something
-	if (get_global_pos().y > screen_rect.y and direction.y >= 0):
+	if (get_global_pos().y > screen_rect.end.y and direction.y >= 0):
 		hit_something(TOP)
 		
 	var new_pos = get_pos()
