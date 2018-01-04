@@ -1,10 +1,12 @@
 extends Area2D
 
-const BASE_BALL_SPEED = 100 #base ball speed
+const COLOR_BLACK = Color(0.1, 0.1, 0.1, 0.5)
+const COLOR_WHITE = Color(1.0, 1.0, 1.0, 0.5)
+const COLOR_RED = Color(1.0, 0.1, 0.1, 0.5)
 
-const COLOR_BLACK = Color(0.1, 0.1, 0.1)
-const COLOR_WHITE = Color(1.0, 1.0, 1.0)
-const COLOR_RED = Color(1.0, 0.1, 0.1)
+
+var BASE_BALL_SPEED = 300 #base ball speed
+var BALL_SPEED_INCREASE = 1.1 #ball speed increase when bouncing
 
 const COLORS = [
 	COLOR_RED, 
@@ -13,7 +15,7 @@ const COLORS = [
 ]
 
 onready var anim = get_node("anim")
-onready var sprite = get_node("sprite")
+onready var sprite_shadow = get_node("sprite_shadow")
 
 var direction = Vector2() #ball direction
 var speed = 0 #current ball speed
@@ -30,7 +32,7 @@ var screen_rect = Vector2()
 
 func _ready():
 	#initialize random direction
-	direction = Vector2(randf() * 2.0 - 1, randf() * 2.0 - 1)
+	direction = Vector2(rand_range(-1.0, 1.0), rand_range(-1.0, 1.0))
 	speed = BASE_BALL_SPEED
 	screen_rect = get_viewport_rect().size
 	
@@ -61,7 +63,7 @@ func _process(delta):
 func hit_something(border_pos):
 	
 	#speed it up
-	speed *= 1.1
+	speed *= BALL_SPEED_INCREASE
 	
 	#switch animation
 	if (anim.get_current_animation() == "spin_cw"):
@@ -71,18 +73,20 @@ func hit_something(border_pos):
 		
 	#switch color
 	color_idx = (color_idx + 1) % COLORS.size()
-	sprite.set_modulate(COLORS[color_idx])
+	sprite_shadow.set_modulate(COLORS[color_idx])
 	
 	if (border_pos == LEFT or border_pos == RIGHT):
 		direction.x *= -1
 		#add a bit of fuzzyness to new direction
-		direction.x *= (1 + (randf() * 2.0 - 1) / 10)
+		direction.x = make_fuzzy(direction.x)
 	if (border_pos == TOP or border_pos == BOTTOM):
 		direction.y *= -1
 		#add a bit of fuzzyness to new direction
-		direction.y *= (1 + (randf() * 2.0 - 1) / 10)
+		direction.y = make_fuzzy(direction.y)
 		
 	direction = direction.normalized()
 	
+func make_fuzzy(value, factor = 0.1):
+	return value * rand_range(1 - factor, 1 + factor)
 	
 	
