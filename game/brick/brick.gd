@@ -34,7 +34,7 @@ func hit_by_ball(ball, position):
 	#ball differnt color, might have survived
 	if (ball.color_idx != color_idx):
 		set_brick_health( curr_brick_health - 1)
-		#anim.play("brick_damaged")
+		anim.play("brick_damaged")
 		if (curr_brick_health <= 0):
 			destroy_brick()
 	#ball same color as brick, kill it
