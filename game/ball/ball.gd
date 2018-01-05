@@ -1,18 +1,9 @@
 extends Area2D
 
-const COLOR_BLACK = Color(0.1, 0.1, 0.1, 0.5)
-const COLOR_WHITE = Color(1.0, 1.0, 1.0, 0.5)
-const COLOR_RED = Color(1.0, 0.1, 0.1, 0.5)
-
+onready var G = get_node("/root/game_state")
 
 var BASE_BALL_SPEED = 150 #base ball speed
 var BALL_SPEED_INCREASE = 1.1 #ball speed increase when bouncing
-
-const COLORS = [
-	COLOR_RED, 
-	COLOR_WHITE, 
-	COLOR_BLACK
-]
 
 onready var anim = get_node("anim")
 onready var sprite_shadow = get_node("sprite_shadow")
@@ -20,13 +11,6 @@ onready var sprite_shadow = get_node("sprite_shadow")
 var direction = Vector2() #ball direction
 var speed = 0 #current ball speed
 var color_idx = 1
-
-enum HIT_DIRECTIONS {
-	TOP, 
-	BOTTOM,
-	LEFT, 
-	RIGHT
-}
 
 var screen_rect = Vector2()
 
@@ -36,9 +20,7 @@ func _ready():
 	speed = BASE_BALL_SPEED
 	screen_rect = get_viewport_rect()
 	
-	var sprite = get_node("sprite")
-	var tex = sprite.get_texture()
-	var extents = (tex.get_size() * sprite.get_scale()) * 0.5
+	var extents = G.get_sprite_extents( get_node("sprite") )
 	
 	screen_rect.pos += extents
 	screen_rect.end -= extents
@@ -50,16 +32,16 @@ func _process(delta):
 	
 	#hit the left wall going left, rebound as if hit right border of something
 	if (get_global_pos().x < screen_rect.pos.x and direction.x <= 0):
-		hit_something(RIGHT)
+		hit_something(G.RIGHT)
 	#hit right wall going right, rebound as if hit left border of something
 	if (get_global_pos().x > screen_rect.end.x and direction.x >= 0):
-		hit_something(LEFT)
+		hit_something(G.LEFT)
 	#hit top wall going up, rebound as if hit bottom border of something
 	if (get_global_pos().y < screen_rect.pos.y and direction.y <= 0):
-		hit_something(BOTTOM)
+		hit_something(G.BOTTOM)
 	#hit bottom wall goind down, rbound as if hit top border of something
 	if (get_global_pos().y > screen_rect.end.y and direction.y >= 0):
-		hit_something(TOP)
+		hit_something(G.TOP)
 		
 	var new_pos = get_pos()
 	new_pos += direction * speed * delta
@@ -79,21 +61,18 @@ func hit_something(border_pos):
 		anim.play("spin_cw")
 		
 	#switch color
-	color_idx = (color_idx + 1) % COLORS.size()
-	sprite_shadow.set_modulate(COLORS[color_idx])
+	color_idx = (color_idx + 1) % G.COLORS.size()
+	sprite_shadow.set_modulate(G.COLORS[color_idx])
 	
-	if (border_pos == LEFT or border_pos == RIGHT):
+	if (border_pos == G.LEFT or border_pos == G.RIGHT):
 		direction.x *= -1
 		#add a bit of fuzzyness to new direction
-		direction.x = make_fuzzy(direction.x)
-	if (border_pos == TOP or border_pos == BOTTOM):
+		direction.x = G.make_fuzzy(direction.x)
+	if (border_pos == G.TOP or border_pos == G.BOTTOM):
 		direction.y *= -1
 		#add a bit of fuzzyness to new direction
-		direction.y = make_fuzzy(direction.y)
+		direction.y = G.make_fuzzy(direction.y)
 		
 	direction = direction.normalized()
-	
-func make_fuzzy(value, factor = 0.1):
-	return value * rand_range(1 - factor, 1 + factor)
 	
 	

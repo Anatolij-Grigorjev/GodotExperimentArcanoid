@@ -1,9 +1,11 @@
 extends KinematicBody2D
 
+onready var G = get_node("/root/game_state")
 
-var max_move_speed #max paddle move speed, limited by mouse as well
+#max paddle move speed, limited by mouse as well
+var max_move_speed 
 
-#vector of movement bounds, screen size - sprite extents
+#vector of movement bounds, screen size X minus sprite extents
 var move_bounds
 
 func _ready():
@@ -14,9 +16,7 @@ func _ready():
 	#total disctance to cross in 1 second(-s)
 	max_move_speed = move_bounds.y
 	
-	var sprite = get_node("sprite")
-	var tex = sprite.get_texture()
-	var extents = (tex.get_size() * sprite.get_scale()) * 0.5
+	var extents = G.get_sprite_extents( get_node("sprite") )
 	
 	#correct movement bounds
 	move_bounds.x += extents.x
@@ -49,7 +49,7 @@ func _process(delta):
 
 func bounce_ball( ball ):
 	
-	ball.hit_something(ball.TOP)
+	ball.hit_something(G.TOP)
 	
 
 func _on_area_enter( area ):

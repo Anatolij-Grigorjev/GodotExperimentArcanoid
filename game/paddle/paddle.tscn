@@ -3,17 +3,17 @@
 [ext_resource path="res://paddle/paddle.gd" type="Script" id=1]
 [ext_resource path="res://paddle/paddle.png" type="Texture" id=2]
 
-[sub_resource type="RectangleShape2D" id=6]
+[sub_resource type="RectangleShape2D" id=1]
 
 custom_solver_bias = 0.0
 extents = Vector2( 170, 50 )
 
-[sub_resource type="ConvexPolygonShape2D" id=4]
+[sub_resource type="ConvexPolygonShape2D" id=2]
 
 custom_solver_bias = 0.0
 points = Vector2Array( -250, 50, -170, -50, -170, 50 )
 
-[sub_resource type="ConvexPolygonShape2D" id=5]
+[sub_resource type="ConvexPolygonShape2D" id=3]
 
 custom_solver_bias = 0.0
 points = Vector2Array( 170, 50, 170, -50, 250, 50 )
@@ -34,7 +34,7 @@ texture = ExtResource( 2 )
 [node name="top_area" type="Area2D" parent="sprite"]
 
 input/pickable = true
-shapes/0/shape = SubResource( 6 )
+shapes/0/shape = SubResource( 1 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
@@ -44,14 +44,14 @@ angular_damp = 1.0
 
 [node name="collider" type="CollisionShape2D" parent="sprite/top_area"]
 
-shape = SubResource( 6 )
+shape = SubResource( 1 )
 trigger = false
 _update_shape_index = 0
 
 [node name="left_bumper" type="Area2D" parent="sprite"]
 
 input/pickable = true
-shapes/0/shape = SubResource( 4 )
+shapes/0/shape = SubResource( 2 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
@@ -61,14 +61,14 @@ angular_damp = 1.0
 
 [node name="collider" type="CollisionShape2D" parent="sprite/left_bumper"]
 
-shape = SubResource( 4 )
+shape = SubResource( 2 )
 trigger = false
 _update_shape_index = 0
 
 [node name="right_bumper" type="Area2D" parent="sprite"]
 
 input/pickable = true
-shapes/0/shape = SubResource( 5 )
+shapes/0/shape = SubResource( 3 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
@@ -78,7 +78,7 @@ angular_damp = 1.0
 
 [node name="collider" type="CollisionShape2D" parent="sprite/right_bumper"]
 
-shape = SubResource( 5 )
+shape = SubResource( 3 )
 trigger = false
 _update_shape_index = 0
 
