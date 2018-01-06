@@ -2,7 +2,7 @@ extends Node2D
 
 onready var G = get_node("/root/game_state")
 
-var color_idx = 0
+var color_idx setget set_color_idx
 
 onready var sprite = get_node("sprite")
 onready var sprite_shadow = get_node("sprite_shadow")
@@ -16,6 +16,7 @@ func _ready():
 	#num of damage sprites is brick total health
 	max_brick_health = sprite.get_hframes()
 	set_brick_health( max_brick_health )
+	set_color_idx( 1 )
 	
 
 func set_brick_health( health ):
@@ -44,6 +45,10 @@ func hit_by_ball(ball, position):
 func destroy_brick():
 	brick_dead = true
 	#anim.play("brick_explode")
+	
+func set_color_idx( new_idx ):
+	color_idx = new_idx % G.COLORS.size()
+	sprite_shadow.set_modulate(G.COLORS[color_idx])
 
 func _on_brick_top_area_enter( area ):
 	resolve_hit_with_pos( area, G.TOP )

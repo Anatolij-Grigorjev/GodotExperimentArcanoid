@@ -5,6 +5,9 @@ onready var G = get_node("/root/game_state")
 #max paddle move speed, limited by mouse as well
 var max_move_speed 
 
+onready var ball_spawn_pos = get_node("ball_spawn_pos")
+var ball_scene = preload("res://ball/ball.tscn")
+
 #vector of movement bounds, screen size X minus sprite extents
 var move_bounds
 
@@ -21,6 +24,8 @@ func _ready():
 	#correct movement bounds
 	move_bounds.x += extents.x
 	move_bounds.y -= extents.x
+	
+	spawn_ball()
 	
 	set_process(true)
 	
@@ -45,10 +50,24 @@ func _process(delta):
 	
 	set_pos(new_pos)
 	
+	var launch_ball = Input.is_action_pressed("launch_ball")
+	#if action pressed and we have a ball to launch
+	if (launch_ball and has_node("ball")):
+		var ball = get_node("ball")
+		var ball_pos = ball.get_global_pos()
+		self.remove_child(ball)
+		self.get_parent().add_child(ball)
+		ball.set_global_pos(ball_pos)
+		ball.launch()
+	
+
+func spawn_ball():
+	var ball = ball_scene.instance()
+	add_child(ball)
+	ball.set_pos(ball_spawn_pos.get_pos())
 
 
 func bounce_ball( ball ):
-	
 	ball.hit_something(G.TOP)
 	
 
