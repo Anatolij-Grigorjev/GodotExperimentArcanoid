@@ -3,7 +3,10 @@ extends Area2D
 onready var G = get_node("/root/game_state")
 
 var BASE_BALL_SPEED = 150 #base ball speed
-var BALL_SPEED_INCREASE = 1.1 #ball speed increase when bouncing
+var MAX_BALL_SPEED = 700 #max speed ball can achieve
+var HALF_BALL_SPEED = MAX_BALL_SPEED / 2 #half max speed of ball
+var BALL_SPEED_MULTIPLIER = 1.1 #ball speed increase when bouncing at low speeds
+var BALL_SPEED_ADDITIVE = 45 #ball speed addition on higher speeds for bouncing
 
 onready var anim = get_node("anim")
 onready var sprite_shadow = get_node("sprite_shadow")
@@ -37,6 +40,21 @@ func launch():
 
 func _process(delta):
 	
+	bounce_screen_bounds()
+	
+	var speed_up_pressed = Input.is_action_pressed("ball_speed_up")
+	if (speed_up_pressed):
+		increase_speed()
+		
+	
+	
+	var new_pos = get_pos()
+	new_pos += direction * speed * delta
+	
+	#integrate what happened
+	set_pos(new_pos)
+	
+func bounce_screen_bounds():
 	#hit the left wall going left, rebound as if hit right border of something
 	if (get_global_pos().x < screen_rect.pos.x and direction.x <= 0):
 		hit_something(G.RIGHT)
@@ -50,11 +68,7 @@ func _process(delta):
 	if (get_global_pos().y > screen_rect.end.y and direction.y >= 0):
 		hit_something(G.TOP)
 		
-	var new_pos = get_pos()
-	new_pos += direction * speed * delta
-	
-	#integrate what happened
-	set_pos(new_pos)
+
 	
 func hit_something(border_pos):
 	#hits ignored while ball stationary
@@ -62,7 +76,7 @@ func hit_something(border_pos):
 		return
 	
 	#speed it up
-	speed *= BALL_SPEED_INCREASE
+	increase_speed()
 	
 	#switch animation
 	if (anim.get_current_animation() == "spin_cw"):
@@ -83,6 +97,25 @@ func hit_something(border_pos):
 		direction.y = G.make_fuzzy(direction.y)
 		
 	direction = direction.normalized()
+
+func increase_speed():
+	#if the ball is at its highest speed already, leave it at that
+	if (speed >= MAX_BALL_SPEED):
+		return
+
+	#if the ball is above 1/2 of max speed
+	#we use addition to gain speed more slowly
+	if (speed >= HALF_BALL_SPEED):
+		speed += BALL_SPEED_ADDITIVE
+	
+	#if the ball is below 1/2 of max speed, 
+	#we multiply its speed by the percentage
+	if (speed < HALF_BALL_SPEED):
+		speed *= BALL_SPEED_MULTIPLIER	
+	
+	#clamp the speed to ensure correct intervals
+	speed = clamp(speed, BASE_BALL_SPEED, MAX_BALL_SPEED)
+	
 	
 func set_color_idx( new_idx ):
 	color_idx = new_idx % G.COLORS.size()

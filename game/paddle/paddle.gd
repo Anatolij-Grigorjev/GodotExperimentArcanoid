@@ -6,7 +6,10 @@ onready var G = get_node("/root/game_state")
 var max_move_speed 
 
 onready var ball_spawn_pos = get_node("ball_spawn_pos")
+onready var paddle_top_pos = get_node("paddle_top_pos")
 var ball_scene = preload("res://ball/ball.tscn")
+
+var pressed_action = false
 
 #vector of movement bounds, screen size X minus sprite extents
 var move_bounds
@@ -50,16 +53,33 @@ func _process(delta):
 	
 	set_pos(new_pos)
 	
-	var launch_ball = Input.is_action_pressed("launch_ball")
-	#if action pressed and we have a ball to launch
-	if (launch_ball and has_node("ball")):
-		var ball = get_node("ball")
-		var ball_pos = ball.get_global_pos()
-		self.remove_child(ball)
-		self.get_parent().add_child(ball)
-		ball.set_global_pos(ball_pos)
-		ball.launch()
+	var spawn_ball_pressed = Input.is_action_pressed("spawn_ball")
+	if (pressed_action):
+		pressed_action = spawn_ball_pressed
+	if (spawn_ball_pressed and not pressed_action):
+		spawn_ball()
+		pressed_action = true
 	
+	var launch_ball_pressed = Input.is_action_pressed("launch_ball")
+	if (launch_ball_pressed):
+		#if action pressed and we have a ball to launch
+		var child_ball = get_child_ball()
+		if (child_ball != null):
+			launch_ball( child_ball )
+
+#fetch the first found direct child who is a ball
+func get_child_ball():
+	for child in get_children():
+		if (child extends preload("res://ball/ball.gd")):
+			return child
+	return null
+	
+func launch_ball( ball ):
+	var ball_pos = ball.get_global_pos()
+	self.remove_child(ball)
+	self.get_parent().add_child(ball)
+	ball.set_global_pos(ball_pos)
+	ball.launch()
 
 func spawn_ball():
 	var ball = ball_scene.instance()
@@ -68,6 +88,11 @@ func spawn_ball():
 
 
 func bounce_ball( ball ):
+	#make sure the ball doesnt fall through the paddle
+	var global_pos = ball.get_global_pos()
+	if (global_pos.y > paddle_top_pos.get_global_pos().y):
+		global_pos.y = paddle_top_pos.get_global_pos().y
+		ball.set_global_pos(global_pos)
 	ball.hit_something(G.TOP)
 	
 
