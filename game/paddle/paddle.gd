@@ -9,7 +9,7 @@ onready var ball_spawn_pos = get_node("ball_spawn_pos")
 onready var paddle_top_pos = get_node("paddle_top_pos")
 var ball_scene = preload("res://ball/ball.tscn")
 
-var pressed_action = false
+var prev_spawn_ball_pressed = false
 
 #vector of movement bounds, screen size X minus sprite extents
 var move_bounds
@@ -54,11 +54,9 @@ func _process(delta):
 	set_pos(new_pos)
 	
 	var spawn_ball_pressed = Input.is_action_pressed("spawn_ball")
-	if (pressed_action):
-		pressed_action = spawn_ball_pressed
-	if (spawn_ball_pressed and not pressed_action):
+	#if action released this frame
+	if (not spawn_ball_pressed and prev_spawn_ball_pressed):
 		spawn_ball()
-		pressed_action = true
 	
 	var launch_ball_pressed = Input.is_action_pressed("launch_ball")
 	if (launch_ball_pressed):
@@ -66,6 +64,8 @@ func _process(delta):
 		var child_ball = get_child_ball()
 		if (child_ball != null):
 			launch_ball( child_ball )
+	
+	prev_spawn_ball_pressed = spawn_ball_pressed
 
 #fetch the first found direct child who is a ball
 func get_child_ball():

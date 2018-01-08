@@ -10,7 +10,7 @@ onready var anim = get_node("anim")
 
 var brick_dead = false
 var max_brick_health
-var curr_brick_health setget set_brick_heatlh
+var curr_brick_health setget set_brick_health
 
 func _ready():
 	#num of damage sprites is brick total health
@@ -45,6 +45,8 @@ func hit_by_ball(ball, position):
 func destroy_brick():
 	brick_dead = true
 	#anim.play("brick_explode")
+	
+
 	
 func set_color_idx( new_idx ):
 	color_idx = new_idx % G.COLORS.size()
