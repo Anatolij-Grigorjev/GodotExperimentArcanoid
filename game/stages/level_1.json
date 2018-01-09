@@ -1,0 +1,9 @@
+{
+	"grid": 
+	[
+		[ null, "W", "W", "R", "W", "W", null ],
+		[ "W", null, "W", "B", "W", null, "W" ],
+		[ "W", null, "W", "B", "W", null, "W" ],
+		[ null, "W", "W", "R", "W", "W", null ]
+	]
+}

@@ -12,6 +12,8 @@ var brick_dead = false
 var max_brick_health
 var curr_brick_health setget set_brick_health
 
+signal brick_destroyed
+
 func _ready():
 	#num of damage sprites is brick total health
 	max_brick_health = sprite.get_hframes()
@@ -22,6 +24,7 @@ func _ready():
 func set_brick_health( health ):
 	curr_brick_health = health
 	sprite.set_frame(curr_brick_health % max_brick_health)
+	sprite_shadow.set_frame(curr_brick_health % max_brick_health)
 	
 func resolve_hit_with_pos( area, position ):
 	if (area extends preload("res://ball/ball.gd") 
@@ -44,8 +47,8 @@ func hit_by_ball(ball, position):
 		
 func destroy_brick():
 	brick_dead = true
-	#anim.play("brick_explode")
-	
+	anim.play("brick_death")
+	emit_signal("brick_destroyed")
 
 	
 func set_color_idx( new_idx ):
