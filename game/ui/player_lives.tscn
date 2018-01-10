@@ -4,16 +4,14 @@
 
 [node name="player_lives" type="CenterContainer"]
 
-anchor/right = 1
-anchor/bottom = 1
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
-margin/left = 10.0
+margin/left = 5.0
 margin/top = 5.0
-margin/right = 10.0
-margin/bottom = 5.0
+margin/right = 155.0
+margin/bottom = 55.0
 use_top_left = false
 script/script = ExtResource( 1 )
 max_lives = 3

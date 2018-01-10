@@ -1,4 +1,4 @@
-extends Control
+extends Node2D
 
 var screen_size
 
@@ -10,7 +10,7 @@ func _ready():
 	
 	screen_size = get_viewport_rect().size
 	
-	set_size(screen_size)
+	#set_size(screen_size)
 	
 	var player_lives = player_lives_clazz.instance()
 	add_child(player_lives)
@@ -19,7 +19,7 @@ func _ready():
 	player_lives.set_pos(
 	Vector2(
 	100,#screen_size.x - player_lives.get_size().x - get_margin(MARGIN_RIGHT),
-	get_margin(MARGIN_TOP)
+	10
 	))
 	
 	for child in player_lives.get_children():

@@ -2,18 +2,8 @@
 
 [ext_resource path="res://ui/player_hud.gd" type="Script" id=1]
 
-[node name="player_hud" type="Control"]
+[node name="player_hud" type="Node2D"]
 
-anchor/right = 1
-anchor/bottom = 1
-focus/ignore_mouse = false
-focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 2
-margin/left = 10.0
-margin/top = 10.0
-margin/right = 10.0
-margin/bottom = 10.0
 script/script = ExtResource( 1 )
 max_lives = 3
 

@@ -37,4 +37,3 @@ func set_num_lives( num ):
 		a_life.set_pos(Vector2(life_idx * life_height + padding_w * life_idx, 0))
 	
 	set_size(Vector2(container_width, CONTAINER_HEIGHT))
-	update()
