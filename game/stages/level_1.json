@@ -1,4 +1,6 @@
 {
+	"c_padding": 5,
+	"r_padding": 5,
 	"grid": 
 	[
 		[ null, "W", "W", "R", "W", "W", null ],

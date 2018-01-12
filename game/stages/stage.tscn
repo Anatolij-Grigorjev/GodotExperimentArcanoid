@@ -10,7 +10,7 @@ script/script = ExtResource( 1 )
 
 [node name="paddle" parent="." instance=ExtResource( 2 )]
 
-transform/pos = Vector2( 530, 800 )
+transform/pos = Vector2( 500, 550 )
 
 [node name="bricks_grid" parent="." instance=ExtResource( 3 )]
 
