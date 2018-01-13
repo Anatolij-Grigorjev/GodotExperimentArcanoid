@@ -29,8 +29,11 @@ var LEVELS = [
 
 var current_level_idx
 
+var player_score
+
 func _ready():
 	current_level_idx = 0
+	player_score = 000000
 	
 func get_sprite_extents( sprite ):
 	var tex = sprite.get_texture()

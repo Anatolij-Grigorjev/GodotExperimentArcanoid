@@ -7,19 +7,26 @@ var color_idx setget set_color_idx
 onready var sprite = get_node("sprite")
 onready var sprite_shadow = get_node("sprite_shadow")
 onready var anim = get_node("anim")
+onready var brick_label = get_node("brick_value")
 
 var brick_dead = false
 var max_brick_health
 var curr_brick_health setget set_brick_health
 
-signal brick_destroyed
+var brick_score_value setget set_brick_score_value
+
+signal brick_destroyed(brick_points)
 
 func _ready():
 	#num of damage sprites is brick total health
 	max_brick_health = sprite.get_hframes()
 	set_brick_health( max_brick_health )
 	set_color_idx( 1 )
+	set_brick_score_value(100)
 	
+func set_brick_score_value(new_val):
+	brick_score_value = new_val
+	brick_label.set_text(str(brick_score_value))
 
 func set_brick_health( health ):
 	curr_brick_health = health
@@ -48,7 +55,7 @@ func hit_by_ball(ball, position):
 func destroy_brick():
 	brick_dead = true
 	anim.play("brick_death")
-	emit_signal("brick_destroyed")
+	emit_signal("brick_destroyed", brick_score_value)
 
 	
 func set_color_idx( new_idx ):

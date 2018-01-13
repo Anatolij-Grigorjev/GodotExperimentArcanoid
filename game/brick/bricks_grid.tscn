@@ -5,5 +5,11 @@
 [node name="bricks_grid" type="Node2D"]
 
 script/script = ExtResource( 1 )
+brick_size = Vector2( 250, 100 )
+grid_area = Vector2( 1024, 300 )
+grid_padding = Vector2( 0, 0 )
+rows_num = 0
+cells_num = 0
+brick_scale_coef = Vector2( 0, 0 )
 
 

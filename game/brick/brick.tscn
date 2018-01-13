@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=1]
+[gd_scene load_steps=10 format=1]
 
 [ext_resource path="res://brick/brick.gd" type="Script" id=1]
 [ext_resource path="res://brick/brick.png" type="Texture" id=2]
+[ext_resource path="res://brick/score_font.fnt" type="BitmapFont" id=3]
 
 [sub_resource type="SegmentShape2D" id=1]
 
@@ -67,7 +68,7 @@ tracks/2/keys = {
 [sub_resource type="Animation" id=6]
 
 resource/name = "brick_death"
-length = 0.5
+length = 0.75
 loop = false
 step = 0.0
 tracks/0/type = "value"
@@ -105,12 +106,32 @@ tracks/3/path = NodePath(".")
 tracks/3/interp = 1
 tracks/3/imported = false
 tracks/3/keys = {
-"times": FloatArray( 0.5 ),
+"times": FloatArray( 0.75 ),
 "transitions": FloatArray( 1 ),
 "values": [ {
 "args": [  ],
 "method": "queue_free"
 } ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("brick_value:visibility/visible")
+tracks/4/interp = 1
+tracks/4/imported = false
+tracks/4/keys = {
+"times": FloatArray( 0, 0.75 ),
+"transitions": FloatArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("brick_value:rect/pos")
+tracks/5/interp = 1
+tracks/5/imported = false
+tracks/5/keys = {
+"times": FloatArray( 0, 0.5 ),
+"transitions": FloatArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -33, -17 ), Vector2( -33, -65 ) ]
 }
 
 [node name="brick" type="Node2D"]
@@ -123,7 +144,6 @@ editor/display_folded = true
 transform/scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 2 )
 hframes = 2
-frame = 1
 
 [node name="brick_top" type="Area2D" parent="sprite"]
 
@@ -198,7 +218,6 @@ _update_shape_index = 0
 transform/scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 2 )
 hframes = 2
-frame = 1
 
 [node name="anim" type="AnimationPlayer" parent="."]
 
@@ -273,6 +292,27 @@ randomness/direction = 1.0
 randomness/linear_velocity = 0.75
 randomness/spin_velocity = 1.0
 randomness/orbit_velocity = 1.0
+
+[node name="brick_value" type="Label" parent="."]
+
+visibility/visible = false
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = -33.0
+margin/top = -65.0
+margin/right = 33.0
+margin/bottom = -29.0
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "000"
+align = 1
+valign = 1
+uppercase = true
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
 
 [connection signal="area_enter" from="sprite/brick_top" to="." method="_on_brick_top_area_enter"]
 
