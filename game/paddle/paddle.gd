@@ -86,6 +86,11 @@ func spawn_ball():
 	add_child(ball)
 	ball.set_pos(ball_spawn_pos.get_pos())
 
+	#connect ball signal to stage if present
+	var stage = get_parent()
+	if (stage.get_name() == "stage"):
+		ball.connect("ball_fell", stage, "ball_fell")
+
 
 func bounce_ball( ball ):
 	#make sure the ball doesnt fall through the paddle

@@ -18,6 +18,8 @@ var launched = false #is the ball in play
 
 var screen_rect = Vector2()
 
+signal ball_fell
+
 func _ready():
 	#initialize random direction
 	screen_rect = get_viewport_rect()
@@ -64,9 +66,11 @@ func bounce_screen_bounds():
 	#hit top wall going up, rebound as if hit bottom border of something
 	if (get_global_pos().y < screen_rect.pos.y and direction.y <= 0):
 		hit_something(G.BOTTOM)
-	#hit bottom wall goind down, rbound as if hit top border of something
-	if (get_global_pos().y > screen_rect.end.y and direction.y >= 0):
-		hit_something(G.TOP)
+	#hit bottom wall goind down, ball lost forever
+	if (get_global_pos().y > (screen_rect.end.y + sprite_shadow.get_texture().get_height()) and direction.y >= 0):
+		emit_signal("ball_fell")
+		set_process(false)
+		return
 		
 
 	
