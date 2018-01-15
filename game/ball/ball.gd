@@ -8,6 +8,8 @@ var HALF_BALL_SPEED = MAX_BALL_SPEED / 2 #half max speed of ball
 var BALL_SPEED_MULTIPLIER = 1.1 #ball speed increase when bouncing at low speeds
 var BALL_SPEED_ADDITIVE = 45 #ball speed addition on higher speeds for bouncing
 
+var LAUNCH_ANGLE_FUNNEL = 15 #degrees of launch funnel not to launch at extreme ends
+
 onready var anim = get_node("anim")
 onready var sprite_shadow = get_node("sprite_shadow")
 
@@ -33,7 +35,11 @@ func _ready():
 	
 func launch():
 	#launch somewhere up
-	direction = Vector2(rand_range(-1.0, 1.0), rand_range(-1.0, 0.0))
+	var angle = rand_range(LAUNCH_ANGLE_FUNNEL, 180 - LAUNCH_ANGLE_FUNNEL) #random angle from ~0 to ~PI
+	var rad_angle = deg2rad(angle)
+	#angle of sin will always be positive, need opposite
+	direction = Vector2(cos(rad_angle), -sin(rad_angle))
+	print("launching ball %s at direction %s from angle %s" % [self, direction, angle])
 	speed = BASE_BALL_SPEED
 	
 	set_process(true)
@@ -47,8 +53,6 @@ func _process(delta):
 	var speed_up_pressed = Input.is_action_pressed("ball_speed_up")
 	if (speed_up_pressed):
 		increase_speed()
-		
-	
 	
 	var new_pos = get_pos()
 	new_pos += direction * speed * delta
