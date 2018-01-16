@@ -10,6 +10,7 @@ onready var anim = get_node("anim")
 onready var brick_label = get_node("brick_value")
 
 var brick_dead = false
+var can_die = true #is the brick succeptible to hits
 var max_brick_health
 var curr_brick_health setget set_brick_health
 
@@ -41,16 +42,17 @@ func resolve_hit_with_pos( area, position ):
 
 func hit_by_ball(ball, position):
 	ball.hit_something(position)
-	
-	#ball differnt color, might have survived
-	if (ball.color_idx != color_idx):
-		set_brick_health( curr_brick_health - 1)
-		anim.play("brick_damaged")
-		if (curr_brick_health <= 0):
+	#resolve brick problems if it can actually die
+	if (can_die):
+		#ball differnt color, might have survived
+		if (ball.color_idx != color_idx):
+			set_brick_health( curr_brick_health - 1)
+			anim.play("brick_damaged")
+			if (curr_brick_health <= 0):
+				destroy_brick()
+		#ball same color as brick, kill it
+		else:
 			destroy_brick()
-	#ball same color as brick, kill it
-	else:
-		destroy_brick()
 		
 func destroy_brick():
 	brick_dead = true

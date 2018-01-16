@@ -1,8 +1,8 @@
 extends Node
 
-const COLOR_BLACK = Color(0.1, 0.1, 0.1, 0.33)
-const COLOR_WHITE = Color(1.0, 1.0, 1.0, 0.33)
-const COLOR_RED = Color(1.0, 0.1, 0.1, 0.33)
+const COLOR_BLACK = Color(0.1, 0.1, 0.1, 0.4)
+const COLOR_WHITE = Color(1.0, 1.0, 1.0, 0.4)
+const COLOR_RED = Color(1.0, 0.1, 0.1, 0.4)
 
 const COLORS = [
 	COLOR_RED, 

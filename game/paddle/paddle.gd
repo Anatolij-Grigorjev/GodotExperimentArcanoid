@@ -85,6 +85,7 @@ func spawn_ball():
 	var ball = ball_scene.instance()
 	add_child(ball)
 	ball.set_pos(ball_spawn_pos.get_pos())
+	ball.can_fall = true #if false, ball can bounc of ground
 
 	#connect ball signal to stage if present
 	var stage = get_parent()

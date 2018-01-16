@@ -17,7 +17,7 @@ var direction = Vector2() #ball direction
 var speed = 0 #current ball speed
 var color_idx setget set_color_idx
 var launched = false #is the ball in play
-
+var can_fall = false #by default ball cant fall, is demo
 var screen_rect = Vector2()
 
 signal ball_fell
@@ -71,11 +71,14 @@ func bounce_screen_bounds():
 	if (get_global_pos().y < screen_rect.pos.y and direction.y <= 0):
 		hit_something(G.BOTTOM)
 	#hit bottom wall goind down, ball lost forever
-	if (get_global_pos().y > (screen_rect.end.y + sprite_shadow.get_texture().get_height()) and direction.y >= 0):
-		emit_signal("ball_fell")
-		set_process(false)
-		return
-		
+	if (can_fall):
+		if (get_global_pos().y > (screen_rect.end.y + sprite_shadow.get_texture().get_height()) and direction.y >= 0):
+			emit_signal("ball_fell")
+			set_process(false)
+			return
+	else:
+		if (get_global_pos().y > screen_rect.end.y and direction.y >= 0):
+			hit_something(G.TOP)
 
 	
 func hit_something(border_pos):
