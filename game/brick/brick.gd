@@ -51,13 +51,17 @@ func hit_by_ball(ball, position):
 			if (curr_brick_health <= 0):
 				destroy_brick()
 		#ball same color as brick, kill it
+		#double score if color was same as ball
 		else:
-			destroy_brick()
+			destroy_brick(true)
 		
-func destroy_brick():
+func destroy_brick(color_death = false):
 	brick_dead = true
+	var multiplier = 2 if color_death else 1
+	var brick_value = multiplier * brick_score_value
+	set_brick_score_value(brick_value)
 	anim.play("brick_death")
-	emit_signal("brick_destroyed", brick_score_value)
+	emit_signal("brick_destroyed", brick_value)
 
 	
 func set_color_idx( new_idx ):

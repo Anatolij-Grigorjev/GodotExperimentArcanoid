@@ -20,7 +20,7 @@ func _ready():
 	
 	#obtain speed as a function of 
 	#total disctance to cross in 1 second(-s)
-	max_move_speed = move_bounds.y
+	max_move_speed = move_bounds.y * 1.5
 	
 	var extents = G.get_sprite_extents( get_node("sprite") )
 	
