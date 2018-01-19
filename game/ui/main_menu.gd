@@ -11,7 +11,7 @@ onready var level_next_btn = get_node("level_next")
 onready var stage = preload("res://stages/stage.tscn")
 
 func _ready():
-	
+	G.menu_node = self
 	validate_level_idx()
 	for node in get_children():
 		#launch balls
@@ -47,21 +47,12 @@ func validate_level_idx():
 func play():
 	#TODO: need better way of stopping menu activity
 	#keep menu cached in autoload with inactive state?
-	set_menu(false)
 	get_tree().get_root().add_child(stage.instance())
+	anim.seek(0.0, true)
+	get_tree().get_root().remove_child(self)
 	
-func set_menu(visible):
-	to_main_menu()
-	
-	for node in get_children():
-		#stop balls
-		if (node extends preload("res://ball/ball.gd")):
-			node.set_process(false)
-	
-	if (not visible):
-		hide()
-	else:
-		show()
+func exit():
+	get_tree().quit()
 	
 	
 	

@@ -31,6 +31,8 @@ var current_level_idx
 
 var player_score
 
+var menu_node
+
 func _ready():
 	current_level_idx = 0
 	player_score = 000000

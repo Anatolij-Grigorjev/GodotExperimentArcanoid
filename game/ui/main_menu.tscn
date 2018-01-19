@@ -212,7 +212,6 @@ max_lines_visible = -1
 
 [node name="stage_select_btn" type="Button" parent="."]
 
-editor/display_folded = true
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
@@ -230,12 +229,11 @@ flat = false
 [node name="brick_stage_select" parent="stage_select_btn" instance=ExtResource( 6 )]
 
 visibility/opacity = 0.0
-transform/pos = Vector2( 53.2864, 20.1692 )
-transform/scale = Vector2( 0.8, 0.8 )
+transform/pos = Vector2( 52.1088, 20.1692 )
+transform/scale = Vector2( 1.7551, 0.8 )
 
 [node name="back_to_menu" type="Button" parent="."]
 
-editor/display_folded = true
 rect/scale = Vector2( 1, 0 )
 focus/ignore_mouse = false
 focus/stop_mouse = true
@@ -254,12 +252,11 @@ flat = false
 [node name="brick" parent="back_to_menu" instance=ExtResource( 6 )]
 
 visibility/opacity = 0.0
-transform/pos = Vector2( 53.2864, 20.1692 )
-transform/scale = Vector2( 0.8, 0.8 )
+transform/pos = Vector2( 58.5006, 31.8908 )
+transform/scale = Vector2( 1.83075, 1.03013 )
 
 [node name="exit_btn" type="Button" parent="."]
 
-editor/display_folded = true
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
@@ -277,12 +274,11 @@ flat = false
 [node name="brick_exit" parent="exit_btn" instance=ExtResource( 6 )]
 
 visibility/opacity = 0.0
-transform/pos = Vector2( 54.5024, 20.8374 )
-transform/scale = Vector2( 0.8, 0.8 )
+transform/pos = Vector2( 52.3615, 21.7309 )
+transform/scale = Vector2( 1.71951, 0.772077 )
 
 [node name="level_prev" type="Button" parent="."]
 
-editor/display_folded = true
 rect/scale = Vector2( 1, 0 )
 focus/ignore_mouse = false
 focus/stop_mouse = true
@@ -302,12 +298,11 @@ flat = false
 [node name="brick" parent="level_prev" instance=ExtResource( 6 )]
 
 visibility/opacity = 0.0
-transform/pos = Vector2( 30.1378, 91.4228 )
-transform/scale = Vector2( 0.489404, 3.67054 )
+transform/pos = Vector2( 28.5942, 92.7728 )
+transform/scale = Vector2( 0.961619, 2.96326 )
 
 [node name="level_next" type="Button" parent="."]
 
-editor/display_folded = true
 rect/scale = Vector2( 1, 0 )
 focus/ignore_mouse = false
 focus/stop_mouse = true
@@ -327,12 +322,11 @@ flat = false
 [node name="brick" parent="level_next" instance=ExtResource( 6 )]
 
 visibility/opacity = 0.0
-transform/pos = Vector2( 30.1378, 91.4228 )
-transform/scale = Vector2( 0.489404, 3.67054 )
+transform/pos = Vector2( 30.2895, 93.6356 )
+transform/scale = Vector2( 0.965837, 2.93961 )
 
 [node name="play_stage" type="Button" parent="."]
 
-editor/display_folded = true
 rect/scale = Vector2( 1, 0 )
 focus/ignore_mouse = false
 focus/stop_mouse = true
@@ -351,8 +345,8 @@ flat = false
 [node name="brick" parent="play_stage" instance=ExtResource( 6 )]
 
 visibility/opacity = 0.0
-transform/pos = Vector2( 134.965, 28.2274 )
-transform/scale = Vector2( 2.12786, 1.00134 )
+transform/pos = Vector2( 134.125, 28.2274 )
+transform/scale = Vector2( 4.25137, 1.00134 )
 
 [node name="anim" type="AnimationPlayer" parent="."]
 
@@ -368,6 +362,8 @@ autoplay = ""
 [connection signal="pressed" from="stage_select_btn" to="." method="to_level_menu"]
 
 [connection signal="pressed" from="back_to_menu" to="." method="to_main_menu"]
+
+[connection signal="pressed" from="exit_btn" to="." method="exit"]
 
 [connection signal="pressed" from="level_prev" to="." method="prev_stage"]
 

@@ -1,5 +1,7 @@
 extends Node2D
 
+onready var G = get_node("/root/game_state")
+
 onready var bricks_grid = get_node("bricks_grid")
 
 onready var score = get_node("score")
@@ -8,11 +10,13 @@ onready var lives = get_node("lives")
 onready var paddle = get_node("paddle")
 
 onready var stage_over_text = get_node("stage_over_text")
+onready var to_menu_btn = get_node("to_menu_btn")
 
 var stage_over
 
 func _ready():
 	stage_over_text.hide()
+	to_menu_btn.hide()
 	stage_over = false
 	
 	lives.connect("all_lives_lost", self, "do_no_lives")
@@ -57,6 +61,7 @@ func finish_stage(message):
 	print(message)
 	stage_over_text.set_text(message)
 	stage_over_text.show()
+	to_menu_btn.show()
 	#stop paddle and balls
 	paddle.set_process(false)
 	for ball in get_children():
@@ -73,4 +78,8 @@ func ball_fell():
 	
 func is_ball(child):
 	return child extends preload("res://ball/ball.gd")
-	
+
+
+func _on_to_menu_btn_pressed():
+	get_tree().get_root().add_child(G.menu_node)
+	self.queue_free()
