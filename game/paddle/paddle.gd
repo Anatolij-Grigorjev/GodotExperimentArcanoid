@@ -7,12 +7,16 @@ var max_move_speed
 
 onready var ball_spawn_pos = get_node("ball_spawn_pos")
 onready var paddle_top_pos = get_node("paddle_top_pos")
+onready var under_paddle_pos = get_node("under_paddle_pos")
+
 var ball_scene = preload("res://ball/ball.tscn")
 
 var prev_spawn_ball_pressed = false
 
 #vector of movement bounds, screen size X minus sprite extents
 var move_bounds
+
+var paddle_rect
 
 func _ready():
 
@@ -23,6 +27,7 @@ func _ready():
 	max_move_speed = move_bounds.y * 1.5
 	
 	var extents = G.get_sprite_extents( get_node("sprite") )
+	paddle_rect = Rect2(get_pos(), extents * 2)
 	
 	#correct movement bounds
 	move_bounds.x += extents.x
@@ -52,6 +57,8 @@ func _process(delta):
 	new_pos.x = clamp(new_pos.x, move_bounds.x, move_bounds.y)
 	
 	set_pos(new_pos)
+	
+	paddle_rect.pos = new_pos
 	
 	var spawn_ball_pressed = Input.is_action_pressed("spawn_ball")
 	#if action released this frame
@@ -86,7 +93,7 @@ func spawn_ball():
 	add_child(ball)
 	ball.set_pos(ball_spawn_pos.get_pos())
 	ball.can_fall = true #if false, ball can bounc of ground
-
+	ball.paddle = self #set ball paddle
 	#connect ball signal to stage if present
 	var stage = get_parent()
 	if (stage.get_name() == "stage"):
@@ -100,6 +107,7 @@ func bounce_ball( ball ):
 		global_pos.y = paddle_top_pos.get_global_pos().y
 		ball.set_global_pos(global_pos)
 	ball.hit_something(G.TOP)
+	print("ball bounce from paddle")
 	
 
 func _on_area_enter( area ):

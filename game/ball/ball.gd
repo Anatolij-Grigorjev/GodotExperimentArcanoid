@@ -2,8 +2,8 @@ extends Area2D
 
 onready var G = get_node("/root/game_state")
 
-var BASE_BALL_SPEED = 150 #base ball speed
-var MAX_BALL_SPEED = 700 #max speed ball can achieve
+var BASE_BALL_SPEED = 700 #base ball speed
+var MAX_BALL_SPEED = 1000 #max speed ball can achieve
 var HALF_BALL_SPEED = MAX_BALL_SPEED / 2 #half max speed of ball
 var BALL_SPEED_MULTIPLIER = 1.1 #ball speed increase when bouncing at low speeds
 var BALL_SPEED_ADDITIVE = 45 #ball speed addition on higher speeds for bouncing
@@ -19,6 +19,8 @@ var color_idx setget set_color_idx
 var launched = false #is the ball in play
 var can_fall = false #by default ball cant fall, is demo
 var screen_rect = Vector2()
+
+var paddle #node to be set by paddle itself when ball is generated
 
 signal ball_fell
 
@@ -57,6 +59,22 @@ func _process(delta):
 	var new_pos = get_pos()
 	new_pos += direction * speed * delta
 	
+	#check the potential ball path - if the paddle is on it,
+	#this should bounce. on high speeds this wont happen 
+	#automatically, so is preemted here
+	if (paddle != null):
+		var old_pos = get_pos()
+		#point is worth exploring
+		if (old_pos.y <= paddle.paddle_top_pos.get_pos().y 
+		and new_pos.y >= paddle.under_paddle_pos.get_pos().y):
+			#get position change coeficient to adjust check
+			var coef = new_pos.y / old_pos.y
+			#check pos
+			if (paddle.paddle_rect.has_point(old_pos * coef)):
+				print("almost fly by paddle! old pos: %s | new pos: %s" % [old_pos, new_pos])
+				#curb new pos somewhat
+				new_pos /= coef
+				
 	#integrate what happened
 	set_pos(new_pos)
 	

@@ -50,11 +50,17 @@ func do_no_lives():
 		
 func get_active_balls_count():
 	var balls = 0
+	#count balls in the air
 	for child in get_children():
 		if (is_ball(child)):
 			#ball only counts as active if its not below the paddle
-			if (child.get_pos().y <= paddle.get_pos().y):
+			if (child.get_pos().y <= paddle.under_paddle_pos.get_pos().y):
 				balls += 1
+	#count balls on the paddle
+	for child in paddle.get_children():
+		if (is_ball(child)):
+			#ball counts as active since it could potenitally be launched
+			balls += 1
 	return balls
 
 func finish_stage(message):
