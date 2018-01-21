@@ -77,7 +77,7 @@ func finish_stage(message):
 #resolve situation of ball falling from stage
 func ball_fell():
 	#anticipate game over and dont spawn ball if it be
-	if (not lives.lives_list.empty()):
+	if (lives.num_lives > 0):
 		paddle.spawn_ball()
 	#lose a life
 	lives.lost_life()

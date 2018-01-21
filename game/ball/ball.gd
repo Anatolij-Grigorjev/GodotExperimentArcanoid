@@ -2,8 +2,8 @@ extends Area2D
 
 onready var G = get_node("/root/game_state")
 
-var BASE_BALL_SPEED = 700 #base ball speed
-var MAX_BALL_SPEED = 1000 #max speed ball can achieve
+var BASE_BALL_SPEED = 200 #base ball speed
+var MAX_BALL_SPEED = 800 #max speed ball can achieve
 var HALF_BALL_SPEED = MAX_BALL_SPEED / 2 #half max speed of ball
 var BALL_SPEED_MULTIPLIER = 1.1 #ball speed increase when bouncing at low speeds
 var BALL_SPEED_ADDITIVE = 45 #ball speed addition on higher speeds for bouncing

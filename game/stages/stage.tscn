@@ -26,12 +26,14 @@ margin/bottom = 45.0
 
 [node name="lives" parent="." instance=ExtResource( 5 )]
 
+anchor/left = 1
+anchor/right = 1
 rect/scale = Vector2( 0.4, 0.4 )
-margin/left = 880.0
+margin/left = -905.0
 margin/top = 15.0
-margin/right = 1200.0
+margin/right = -1005.0
 margin/bottom = 115.0
-max_num_lives = 99
+max_num_lives = 10
 
 [node name="stage_over_text" type="Label" parent="."]
 

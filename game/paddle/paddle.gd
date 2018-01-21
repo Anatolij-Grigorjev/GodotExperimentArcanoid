@@ -2,14 +2,20 @@ extends KinematicBody2D
 
 onready var G = get_node("/root/game_state")
 
+const MAX_BOUNCE_COOLDOWN = 0.1
+const COLOR_BLACK = Color(0, 0, 0)
+const COLOR_WHITE = Color(1, 1, 1)
+
 #max paddle move speed, limited by mouse as well
 var max_move_speed 
 
 onready var ball_spawn_pos = get_node("ball_spawn_pos")
 onready var paddle_top_pos = get_node("paddle_top_pos")
 onready var under_paddle_pos = get_node("under_paddle_pos")
+onready var sprite = get_node("sprite")
 
 var ball_scene = preload("res://ball/ball.tscn")
+
 
 var prev_spawn_ball_pressed = false
 
@@ -17,6 +23,10 @@ var prev_spawn_ball_pressed = false
 var move_bounds
 
 var paddle_rect
+
+var just_bounced = false #did the ball just perform a bounce?
+var bounce_cooldown = 0
+
 
 func _ready():
 
@@ -64,6 +74,8 @@ func _process(delta):
 	#if action released this frame
 	if (not spawn_ball_pressed and prev_spawn_ball_pressed):
 		spawn_ball()
+		
+	update_bounce_cooldown(delta)
 	
 	var launch_ball_pressed = Input.is_action_pressed("launch_ball")
 	if (launch_ball_pressed):
@@ -71,8 +83,15 @@ func _process(delta):
 		var child_ball = get_child_ball()
 		if (child_ball != null):
 			launch_ball( child_ball )
-	
 	prev_spawn_ball_pressed = spawn_ball_pressed
+	
+func update_bounce_cooldown(delta):
+	if (just_bounced):
+		if (bounce_cooldown <= 0):
+			just_bounced = false
+			sprite.set_modulate(COLOR_WHITE)
+		else:
+			bounce_cooldown -= delta
 
 #fetch the first found direct child who is a ball
 func get_child_ball():
@@ -107,9 +126,11 @@ func bounce_ball( ball ):
 		global_pos.y = paddle_top_pos.get_global_pos().y
 		ball.set_global_pos(global_pos)
 	ball.hit_something(G.TOP)
-	print("ball bounce from paddle")
+	just_bounced = true
+	sprite.set_modulate(COLOR_BLACK)
+	bounce_cooldown = MAX_BOUNCE_COOLDOWN
 	
 
 func _on_area_enter( area ):
-	if (area extends preload("res://ball/ball.gd")):
+	if (area extends preload("res://ball/ball.gd") and not just_bounced):
 		bounce_ball( area )
