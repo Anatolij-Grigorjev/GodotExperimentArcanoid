@@ -44,9 +44,8 @@ func _ready():
 	move_bounds.y -= extents.x
 	
 	spawn_ball()
-	
-	set_process(true)
-	
+
+
 func _process(delta):
 	var mouse_pos = get_global_mouse_pos()
 		

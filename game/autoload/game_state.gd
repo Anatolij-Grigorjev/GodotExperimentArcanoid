@@ -45,18 +45,20 @@ func load_levels_filenames():
 		levels_dir.list_dir_begin()
 		var file_name = levels_dir.get_next()
 		while(file_name != ""):
+			print("Dealing with file %s" % file_name)
 			if (not levels_dir.current_is_dir()):
 				#check filename follows convention
 				if (file_name.begins_with(LEVELS_NAME_PATTERN)):
-					var level_number = file_name.right(LEVELS_NAME_PATTERN)
+					var level_number = file_name.right(LEVELS_NAME_PATTERN.length())
 					#file has extension
 					var ext_idx = level_number.find(".")
 					if (ext_idx != -1):
 						level_number = level_number.left(ext_idx)
-						
 					#done, lets use this integer
 					if (level_number.is_valid_integer()):
 						LEVELS[level_number.to_int()] = file_name
+			#fetch next file
+			file_name = levels_dir.get_next()
 	else:
 		print("ERROR opening director %s: %s" % [LEVELS_DIR, dir_open])
 	

@@ -11,6 +11,8 @@ onready var paddle = get_node("paddle")
 
 onready var stage_over_text = get_node("stage_over_text")
 onready var to_menu_btn = get_node("to_menu_btn")
+onready var anim = get_node("anim")
+onready var stage_title = get_node("stage_name_label")
 
 var stage_over
 
@@ -19,12 +21,15 @@ func _ready():
 	to_menu_btn.hide()
 	stage_over = false
 	
+	stage_title.set_text("level %s:\n%s" % [G.current_level_idx, bricks_grid.level_bricks_map.level_name])
+	
 	lives.connect("all_lives_lost", self, "do_no_lives")
 	for child in bricks_grid.get_children():
 		if (child extends preload("res://brick/brick.gd")):
 			child.connect("brick_destroyed", score, "update_score")
 			child.connect("brick_destroyed", self, "check_stage_over")
 	
+	anim.play("level_start")
 	
 #check if there are bricks left
 func has_bricks_left():

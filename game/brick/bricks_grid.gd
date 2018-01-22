@@ -4,6 +4,7 @@ onready var G = get_node("/root/game_state")
 
 var level_bricks_map = {}
 
+
 onready var bricks = preload("res://brick/brick.tscn")
 
 
