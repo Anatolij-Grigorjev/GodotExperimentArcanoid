@@ -22,20 +22,44 @@ enum HIT_DIRECTIONS {
 	LEFT, 
 	RIGHT
 }
+const LEVELS_DIR = "res://stages"
+const LEVELS_NAME_PATTERN = "level_"
 
-var LEVELS = [
-	"level_1.json"
-]
-
+var LEVELS
 var current_level_idx
-
 var player_score
 
+#variable to store menu node after the player moved on to a game screen
 var menu_node
 
 func _ready():
-	current_level_idx = 0
+	current_level_idx = 1
 	player_score = 000000
+	load_levels_filenames()
+	
+func load_levels_filenames():
+	LEVELS = {}
+	var levels_dir = Directory.new()
+	var dir_open = levels_dir.open(LEVELS_DIR)
+	if (dir_open == OK):
+		levels_dir.list_dir_begin()
+		var file_name = levels_dir.get_next()
+		while(file_name != ""):
+			if (not levels_dir.current_is_dir()):
+				#check filename follows convention
+				if (file_name.begins_with(LEVELS_NAME_PATTERN)):
+					var level_number = file_name.right(LEVELS_NAME_PATTERN)
+					#file has extension
+					var ext_idx = level_number.find(".")
+					if (ext_idx != -1):
+						level_number = level_number.left(ext_idx)
+						
+					#done, lets use this integer
+					if (level_number.is_valid_integer()):
+						LEVELS[level_number.to_int()] = file_name
+	else:
+		print("ERROR opening director %s: %s" % [LEVELS_DIR, dir_open])
+	
 	
 func get_sprite_extents( sprite ):
 	var tex = sprite.get_texture()
@@ -53,7 +77,7 @@ func make_fuzzy(value, factor = 0.1):
 func get_current_level_json():
 	var filename = LEVELS[current_level_idx]
 	var file = File.new()
-	var err = file.open("res://stages/%s" % filename, File.READ)
+	var err = file.open(LEVELS_DIR.plus_file(filename), File.READ)
 	if (err == OK):
 		var text = file.get_as_text()
 		file.close()

@@ -1,0 +1,12 @@
+{
+	"level_name": "Colander",
+	"c_padding": 0,
+	"r_padding": 0,
+	"grid": 
+	[
+		[ null, "W", null, "W", null, "W", null ],
+		[ "W", null, "W", null, "W", null, "W" ],
+		[ null, "W", null, "W", null, "W", null ],
+		[ "W", null, "W", null, "W", null, "W" ]
+	]
+}
