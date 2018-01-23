@@ -12,6 +12,11 @@ onready var stage = preload("res://stages/stage.tscn")
 
 func _ready():
 	G.menu_node = self
+	if (G.coming_from_level):
+		#advance animation to level selection
+		anim.seek(2.5, true)
+		#reset coming from level
+		G.coming_from_level = false
 	validate_level_idx()
 	for node in get_children():
 		#launch balls

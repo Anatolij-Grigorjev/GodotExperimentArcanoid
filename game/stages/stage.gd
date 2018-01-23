@@ -21,7 +21,7 @@ func _ready():
 	to_menu_btn.hide()
 	stage_over = false
 	
-	stage_title.set_text("level %s:\n%s" % [G.current_level_idx, bricks_grid.level_bricks_map.level_name])
+	stage_title.set_text("level %s:\n%s" % [G.current_level_idx + 1, bricks_grid.level_bricks_map.level_name])
 	
 	lives.connect("all_lives_lost", self, "do_no_lives")
 	for child in bricks_grid.get_children():
@@ -70,6 +70,8 @@ func get_active_balls_count():
 
 func finish_stage(message):
 	print(message)
+	#set that we are returning to menu from game level
+	G.coming_from_level = true
 	stage_over_text.set_text(message)
 	stage_over_text.show()
 	to_menu_btn.show()

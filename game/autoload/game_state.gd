@@ -28,17 +28,27 @@ const LEVELS_NAME_PATTERN = "level_"
 var LEVELS
 var current_level_idx
 var player_score
+#are we entering main menu from level
+var coming_from_level
 
 #variable to store menu node after the player moved on to a game screen
 var menu_node
 
 func _ready():
-	current_level_idx = 1
+	current_level_idx = 0
 	player_score = 000000
+	coming_from_level = false
 	load_levels_filenames()
 	
 func load_levels_filenames():
-	LEVELS = {}
+	#atual array that will hold sorted levels
+	LEVELS = []
+	#map that will relate level name number to level file name 
+	var levels_map = {}
+	#array of level indices within filenames 
+	#(will be sorted before putting into final array)
+	var indices = []
+	
 	var levels_dir = Directory.new()
 	var dir_open = levels_dir.open(LEVELS_DIR)
 	if (dir_open == OK):
@@ -56,9 +66,16 @@ func load_levels_filenames():
 						level_number = level_number.left(ext_idx)
 					#done, lets use this integer
 					if (level_number.is_valid_integer()):
-						LEVELS[level_number.to_int()] = file_name
+						indices.append(level_number.to_int())
+						levels_map[level_number.to_int()] = file_name
 			#fetch next file
 			file_name = levels_dir.get_next()
+		#loop over, time to sort indices
+		indices.sort()
+		for idx in indices:
+			LEVELS.append(levels_map[idx])
+		#print levels just in case
+		print("LEVELS discovered: %s" % [LEVELS])
 	else:
 		print("ERROR opening director %s: %s" % [LEVELS_DIR, dir_open])
 	

@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 onready var G = get_node("/root/game_state")
 
-const MAX_BOUNCE_COOLDOWN = 0.1
+const MAX_BOUNCE_COOLDOWN = 0.01
 const COLOR_BLACK = Color(0, 0, 0)
 const COLOR_WHITE = Color(1, 1, 1)
 
