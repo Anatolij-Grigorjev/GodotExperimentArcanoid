@@ -25,7 +25,7 @@ enum HIT_DIRECTIONS {
 const LEVELS_DIR = "res://stages"
 const LEVELS_NAME_PATTERN = "level_"
 
-var LEVELS
+var LEVEL_FILENAMES
 var current_level_idx
 var player_score
 #are we entering main menu from level
@@ -42,7 +42,7 @@ func _ready():
 	
 func load_levels_filenames():
 	#atual array that will hold sorted levels
-	LEVELS = []
+	LEVEL_FILENAMES = []
 	#map that will relate level name number to level file name 
 	var levels_map = {}
 	#array of level indices within filenames 
@@ -73,9 +73,9 @@ func load_levels_filenames():
 		#loop over, time to sort indices
 		indices.sort()
 		for idx in indices:
-			LEVELS.append(levels_map[idx])
+			LEVEL_FILENAMES.append(levels_map[idx])
 		#print levels just in case
-		print("LEVELS discovered: %s" % [LEVELS])
+		print("LEVEL_FILENAMES discovered: %s" % [LEVEL_FILENAMES])
 	else:
 		print("ERROR opening director %s: %s" % [LEVELS_DIR, dir_open])
 	
@@ -94,7 +94,7 @@ func make_fuzzy(value, factor = 0.1):
 	
 #fetch the level json and closes file after itself
 func get_current_level_json():
-	var filename = LEVELS[current_level_idx]
+	var filename = LEVEL_FILENAMES[current_level_idx]
 	var file = File.new()
 	var err = file.open(LEVELS_DIR.plus_file(filename), File.READ)
 	if (err == OK):

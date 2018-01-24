@@ -33,7 +33,7 @@ func to_main_menu():
 	anim.play_backwards("to_stage_select")
 	
 func refresh_level_lbl():
-	level_lbl.set_text("# %s" % (G.current_level_idx + 1))
+	level_lbl.set_text(G.LEVEL_FILENAMES[G.current_level_idx])
 	
 func next_stage():
 	G.current_level_idx += 1
@@ -44,14 +44,32 @@ func prev_stage():
 	validate_level_idx()
 	
 func validate_level_idx():
-	G.current_level_idx = clamp(G.current_level_idx, 0, G.LEVELS.size() - 1)
+	G.current_level_idx = clamp(G.current_level_idx, 0, G.LEVEL_FILENAMES.size() - 1)
 	refresh_level_lbl()
-	level_prev_btn.set_disabled(G.current_level_idx == 0)
-	level_next_btn.set_disabled(G.current_level_idx == G.LEVELS.size() - 1)
+	#cycled to first level in selection
+	validate_page_button(
+	level_prev_btn, 
+	G.current_level_idx == 0,
+	"<" + str(G.current_level_idx)) #display prev level number
 	
+	#cycled to last level in selection
+	validate_page_button(
+	level_next_btn, 
+	G.current_level_idx == G.LEVEL_FILENAMES.size() - 1,
+	str(G.current_level_idx + 2) + ">") #display next level number
+
+
+func validate_page_button(button, disabled_cond, enabled_text):
+	if (disabled_cond):
+		button.set_disabled(true)
+		button.set_text("")
+	else:
+		button.set_disabled(false)
+		button.set_text(enabled_text)
+
+
 func play():
-	#TODO: need better way of stopping menu activity
-	#keep menu cached in autoload with inactive state?
+	#keep menu cached in game state after switching to stage
 	get_tree().get_root().add_child(stage.instance())
 	anim.seek(0.0, true)
 	get_tree().get_root().remove_child(self)
