@@ -2,6 +2,8 @@ extends Control
 
 onready var G = get_node("/root/game_state")
 
+const MENU_ANIMATION_LENGTH = 2.5
+
 onready var level_lbl = get_node("level_panel/level_label")
 onready var anim = get_node("anim")
 
@@ -14,7 +16,7 @@ func _ready():
 	G.menu_node = self
 	if (G.coming_from_level):
 		#advance animation to level selection
-		anim.seek(2.5, true)
+		anim.seek(MENU_ANIMATION_LENGTH, true)
 		#reset coming from level
 		G.coming_from_level = false
 	validate_level_idx()
