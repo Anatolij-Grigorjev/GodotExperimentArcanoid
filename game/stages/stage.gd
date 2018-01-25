@@ -23,6 +23,8 @@ func _ready():
 	
 	stage_title.set_text("level %s:\n%s" % [G.current_level_idx + 1, bricks_grid.level_bricks_map.level_name])
 	
+	#set number of remainig lives globally
+	lives.set_num_lives(G.remaining_lives)
 	lives.connect("all_lives_lost", self, "do_no_lives")
 	for child in bricks_grid.get_children():
 		if (child extends preload("res://brick/brick.gd")):
@@ -59,7 +61,7 @@ func get_active_balls_count():
 	for child in get_children():
 		if (is_ball(child)):
 			#ball only counts as active if its not below the paddle
-			if (child.get_pos().y <= paddle.under_paddle_pos.get_pos().y):
+			if (child.get_global_pos().y <= paddle.under_paddle_pos.get_global_pos().y):
 				balls += 1
 	#count balls on the paddle
 	for child in paddle.get_children():
@@ -72,6 +74,13 @@ func finish_stage(message):
 	print(message)
 	#set that we are returning to menu from game level
 	G.coming_from_level = true
+	#set remaining lives if any
+	var num_lives = lives.num_lives
+	if (num_lives > 0):
+		G.remaining_lives = num_lives
+	else:
+		G.remaining_lives = G.MAX_LIVES
+	
 	stage_over_text.set_text(message)
 	stage_over_text.show()
 	to_menu_btn.show()
@@ -85,9 +94,14 @@ func finish_stage(message):
 func ball_fell():
 	#anticipate game over and dont spawn ball if it be
 	if (lives.num_lives > 0):
-		paddle.spawn_ball()
-	#lose a life
-	lives.lost_life()
+		#spawn ball if none are available
+		if (get_active_balls_count() <= 0):
+			paddle.spawn_ball()
+	#emit game over if no lives and no balls to play
+	else:
+		if (get_active_balls_count() <= 0):
+			lives.lost_life()
+			
 	
 func is_ball(child):
 	return child extends preload("res://ball/ball.gd")

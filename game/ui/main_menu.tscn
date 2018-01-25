@@ -1,12 +1,13 @@
-[gd_scene load_steps=10 format=1]
+[gd_scene load_steps=11 format=1]
 
 [ext_resource path="res://ui/main_menu.gd" type="Script" id=1]
 [ext_resource path="res://ui/score.tscn" type="PackedScene" id=2]
-[ext_resource path="res://ball/ball.tscn" type="PackedScene" id=3]
-[ext_resource path="res://garcanoid_logo.png" type="Texture" id=4]
-[ext_resource path="res://brick/score_font.fnt" type="BitmapFont" id=5]
-[ext_resource path="res://brick/brick.tscn" type="PackedScene" id=6]
-[ext_resource path="res://ui/level_font.fnt" type="BitmapFont" id=7]
+[ext_resource path="res://ui/lives.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ball/ball.tscn" type="PackedScene" id=4]
+[ext_resource path="res://garcanoid_logo.png" type="Texture" id=5]
+[ext_resource path="res://brick/score_font.fnt" type="BitmapFont" id=6]
+[ext_resource path="res://brick/brick.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ui/level_font.fnt" type="BitmapFont" id=8]
 
 [sub_resource type="StyleBoxFlat" id=1]
 
@@ -149,11 +150,19 @@ margin/top = 15.0
 margin/right = 116.0
 margin/bottom = 45.0
 
-[node name="ball1" parent="." instance=ExtResource( 3 )]
+[node name="lives_ball" parent="." instance=ExtResource( 3 )]
+
+rect/scale = Vector2( 0.4, 0.4 )
+margin/left = 976.0
+margin/top = 13.0
+margin/right = 1076.0
+margin/bottom = 113.0
+
+[node name="ball1" parent="." instance=ExtResource( 4 )]
 
 transform/pos = Vector2( 174.548, 456.318 )
 
-[node name="ball2" parent="." instance=ExtResource( 3 )]
+[node name="ball2" parent="." instance=ExtResource( 4 )]
 
 transform/pos = Vector2( 886.454, 144.625 )
 
@@ -168,7 +177,7 @@ margin/left = 335.0
 margin/top = 55.0
 margin/right = 1589.0
 margin/bottom = 1082.0
-texture = ExtResource( 4 )
+texture = ExtResource( 5 )
 stretch_mode = 0
 
 [node name="level_panel" type="Panel" parent="."]
@@ -196,7 +205,7 @@ margin/left = 0.0
 margin/top = 0.0
 margin/right = 0.0
 margin/bottom = -1.0
-custom_fonts/font = ExtResource( 5 )
+custom_fonts/font = ExtResource( 6 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 0.246094, 0.244171, 0.244171, 1 )
 custom_constants/shadow_offset_x = 1
@@ -226,7 +235,7 @@ shortcut = null
 text = "STAGE SELECT"
 flat = false
 
-[node name="brick_stage_select" parent="stage_select_btn" instance=ExtResource( 6 )]
+[node name="brick_stage_select" parent="stage_select_btn" instance=ExtResource( 7 )]
 
 visibility/opacity = 0.0
 transform/pos = Vector2( 52.1088, 20.1692 )
@@ -249,7 +258,7 @@ shortcut = null
 text = "BACK TO MAIN"
 flat = false
 
-[node name="brick" parent="back_to_menu" instance=ExtResource( 6 )]
+[node name="brick" parent="back_to_menu" instance=ExtResource( 7 )]
 
 visibility/opacity = 0.0
 transform/pos = Vector2( 58.5006, 31.8908 )
@@ -271,7 +280,7 @@ shortcut = null
 text = "EXIT"
 flat = false
 
-[node name="brick_exit" parent="exit_btn" instance=ExtResource( 6 )]
+[node name="brick_exit" parent="exit_btn" instance=ExtResource( 7 )]
 
 visibility/opacity = 0.0
 transform/pos = Vector2( 52.3615, 21.7309 )
@@ -288,14 +297,14 @@ margin/left = 218.0
 margin/top = 217.0
 margin/right = 277.0
 margin/bottom = 402.0
-custom_fonts/font = ExtResource( 7 )
+custom_fonts/font = ExtResource( 8 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 text = "<"
 flat = false
 
-[node name="brick" parent="level_prev" instance=ExtResource( 6 )]
+[node name="brick" parent="level_prev" instance=ExtResource( 7 )]
 
 visibility/opacity = 0.0
 transform/pos = Vector2( 28.5942, 92.7728 )
@@ -312,14 +321,14 @@ margin/left = 775.0
 margin/top = 217.0
 margin/right = 834.0
 margin/bottom = 402.0
-custom_fonts/font = ExtResource( 7 )
+custom_fonts/font = ExtResource( 8 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 text = ">"
 flat = false
 
-[node name="brick" parent="level_next" instance=ExtResource( 6 )]
+[node name="brick" parent="level_next" instance=ExtResource( 7 )]
 
 visibility/opacity = 0.0
 transform/pos = Vector2( 30.2895, 93.6356 )
@@ -342,7 +351,7 @@ shortcut = null
 text = "PLAY"
 flat = false
 
-[node name="brick" parent="play_stage" instance=ExtResource( 6 )]
+[node name="brick" parent="play_stage" instance=ExtResource( 7 )]
 
 visibility/opacity = 0.0
 transform/pos = Vector2( 134.125, 28.2274 )

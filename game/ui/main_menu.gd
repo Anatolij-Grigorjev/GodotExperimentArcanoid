@@ -6,6 +6,7 @@ const MENU_ANIMATION_LENGTH = 2.5
 
 onready var level_lbl = get_node("level_panel/level_label")
 onready var anim = get_node("anim")
+onready var lives = get_node("lives_ball")
 
 onready var level_prev_btn = get_node("level_prev")
 onready var level_next_btn = get_node("level_next")
@@ -19,6 +20,7 @@ func _ready():
 		anim.seek(MENU_ANIMATION_LENGTH, true)
 		#reset coming from level
 		G.coming_from_level = false
+	lives.set_num_lives(G.remaining_lives)
 	validate_level_idx()
 	for node in get_children():
 		#launch balls

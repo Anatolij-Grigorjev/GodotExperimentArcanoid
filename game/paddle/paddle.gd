@@ -27,11 +27,13 @@ var paddle_rect
 var just_bounced = false #did the ball just perform a bounce?
 var bounce_cooldown = 0
 
+var lives
 
 func _ready():
 
 	move_bounds = Vector2(0, get_viewport_rect().size.x)
-	
+	#try to get handle on lives UI (if this is a stage)
+	lives = get_node("../lives")
 	#obtain speed as a function of 
 	#total disctance to cross in 1 second(-s)
 	max_move_speed = move_bounds.y * 1.5
@@ -43,7 +45,8 @@ func _ready():
 	move_bounds.x += extents.x
 	move_bounds.y -= extents.x
 	
-	spawn_ball()
+	#intial spawn of ball is freebie
+	spawn_ball(false)
 
 
 func _process(delta):
@@ -72,7 +75,12 @@ func _process(delta):
 	var spawn_ball_pressed = Input.is_action_pressed("spawn_ball")
 	#if action released this frame
 	if (not spawn_ball_pressed and prev_spawn_ball_pressed):
-		spawn_ball()
+		#if in stage, only allow ball spawning when there are balls to spawn
+		if (lives != null):
+			if (lives.num_lives > 0):
+				spawn_ball()
+		else:
+			spawn_ball()
 		
 	update_bounce_cooldown(delta)
 	
@@ -106,7 +114,17 @@ func launch_ball( ball ):
 	ball.set_global_pos(ball_pos)
 	ball.launch()
 
-func spawn_ball():
+func spawn_ball(check_lives = true):
+	if (check_lives):
+		#spawning ball costs a life
+		if (lives != null):
+			#if there are lives to take then spawning is possible	
+			if (lives.num_lives <= 0):
+				lives.lost_life()
+				#stop spawn if all lives lost
+				return
+			lives.lost_life()
+	
 	var ball = ball_scene.instance()
 	add_child(ball)
 	ball.set_pos(ball_spawn_pos.get_pos())

@@ -25,6 +25,7 @@ enum HIT_DIRECTIONS {
 const LEVELS_DIR = "res://stages"
 const LEVEL_NAMES_FILE = "res://menus/level_names.json"
 const LEVELS_NAME_PATTERN = "level_"
+const MAX_LIVES = 5
 
 var LEVEL_FILENAMES
 var LEVEL_NAMES
@@ -33,10 +34,13 @@ var player_score
 #are we entering main menu from level
 var coming_from_level
 
+var remaining_lives
+
 #variable to store menu node after the player moved on to a game screen
 var menu_node
 
 func _ready():
+	remaining_lives = MAX_LIVES
 	current_level_idx = 0
 	player_score = 000000
 	coming_from_level = false
