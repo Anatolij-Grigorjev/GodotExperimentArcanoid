@@ -15,6 +15,11 @@ const COLOR_TO_IDX = {
 	"W": 1, 
 	"B": 2
 }
+const LEVEL_UP_MILESTONES = [
+	500,
+	1000,
+	1500
+]
 
 enum HIT_DIRECTIONS {
 	TOP, 
@@ -25,12 +30,12 @@ enum HIT_DIRECTIONS {
 const LEVELS_DIR = "res://stages"
 const LEVEL_NAMES_FILE = "res://menus/level_names.json"
 const LEVELS_NAME_PATTERN = "level_"
-const MAX_LIVES = 5
+const MAX_LIVES = 0
 
 var LEVEL_FILENAMES
 var LEVEL_NAMES
 var current_level_idx
-var player_score
+var player_score setget set_player_score
 #are we entering main menu from level
 var coming_from_level
 
@@ -39,7 +44,11 @@ var remaining_lives
 #variable to store menu node after the player moved on to a game screen
 var menu_node
 
+signal score_milestone
+
 func _ready():
+	#sort level up milestones in ascending order just in case
+	LEVEL_UP_MILESTONES.sort()
 	remaining_lives = MAX_LIVES
 	current_level_idx = 0
 	player_score = 000000
@@ -94,7 +103,19 @@ func load_levels_filenames():
 		print("LEVEL_FILENAMES discovered: %s" % [LEVEL_FILENAMES])
 	else:
 		print("ERROR opening director %s: %s" % [LEVELS_DIR, dir_open])
+		
+func set_player_score(score):
+	player_score = score
 	
+	if(has_node("/root/main_menu")):
+		return
+		
+	for score in LEVEL_UP_MILESTONES:
+		if (player_score > score):
+			emit_signal("score_milestone")
+			LEVEL_UP_MILESTONES.pop_front()
+			return
+	return
 	
 func get_sprite_extents( sprite ):
 	var tex = sprite.get_texture()
