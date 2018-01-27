@@ -25,7 +25,9 @@ enum HIT_DIRECTIONS {
 	TOP, 
 	BOTTOM,
 	LEFT, 
-	RIGHT
+	RIGHT,
+	L_SLOPE,
+	R_SLOPE
 }
 const LEVELS_DIR = "res://stages"
 const LEVEL_NAMES_FILE = "res://menus/level_names.json"
@@ -43,8 +45,6 @@ var remaining_lives
 
 #variable to store menu node after the player moved on to a game screen
 var menu_node
-
-signal score_milestone
 
 func _ready():
 	#sort level up milestones in ascending order just in case
@@ -106,13 +106,16 @@ func load_levels_filenames():
 		
 func set_player_score(score):
 	player_score = score
-	
-	if(has_node("/root/main_menu")):
+	#skip this part if no more milestones
+	if (LEVEL_UP_MILESTONES.empty()):
 		return
-		
-	for score in LEVEL_UP_MILESTONES:
-		if (player_score > score):
-			emit_signal("score_milestone")
+	print("searching %s in milestones %s" % [player_score, LEVEL_UP_MILESTONES])
+	for milestone in LEVEL_UP_MILESTONES:
+		if (player_score > milestone):
+			#find lives node in stage
+			var lives = get_node("/root/stage/lives")
+			if (lives != null):
+				lives.add_life()
 			LEVEL_UP_MILESTONES.pop_front()
 			return
 	return

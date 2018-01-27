@@ -136,18 +136,28 @@ func spawn_ball(check_lives = true):
 		ball.connect("ball_fell", stage, "ball_fell")
 
 
-func bounce_ball( ball ):
+func bounce_ball( ball, border_pos ):
 	#make sure the ball doesnt fall through the paddle
 	var global_pos = ball.get_global_pos()
 	if (global_pos.y > paddle_top_pos.get_global_pos().y):
 		global_pos.y = paddle_top_pos.get_global_pos().y
 		ball.set_global_pos(global_pos)
-	ball.hit_something(G.TOP)
+	ball.hit_something(border_pos)
 	just_bounced = true
 	sprite.set_modulate(COLOR_BLACK)
 	bounce_cooldown = MAX_BOUNCE_COOLDOWN
 	
+func is_bounceable_ball( area ):
+	return area extends preload("res://ball/ball.gd") and not just_bounced
 
-func _on_area_enter( area ):
-	if (area extends preload("res://ball/ball.gd") and not just_bounced):
-		bounce_ball( area )
+func central_bumper_enter( area ):
+	if (is_bounceable_ball(area)):
+		bounce_ball( area, G.TOP )
+
+func left_bumper_enter( area ):
+	if (is_bounceable_ball(area)):
+		bounce_ball( area, G.L_SLOPE )
+		
+func right_bumper_enter( area ):
+	if (is_bounceable_ball(area)):
+		bounce_ball( area, G.R_SLOPE )

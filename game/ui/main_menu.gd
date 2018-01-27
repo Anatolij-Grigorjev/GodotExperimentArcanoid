@@ -6,7 +6,7 @@ const MENU_ANIMATION_LENGTH = 2.5
 
 onready var level_lbl = get_node("level_panel/level_label")
 onready var anim = get_node("anim")
-onready var lives = get_node("lives_ball")
+onready var lives = get_node("lives")
 
 onready var level_prev_btn = get_node("level_prev")
 onready var level_next_btn = get_node("level_next")

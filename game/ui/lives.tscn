@@ -83,6 +83,7 @@ max_lines_visible = -1
 
 [node name="life_up" type="Node2D" parent="."]
 
+editor/display_folded = true
 visibility/visible = false
 transform/pos = Vector2( 0, 110 )
 
