@@ -21,6 +21,8 @@ const LEVEL_UP_MILESTONES = [
 	1500
 ]
 
+var LEVEL_HIGHSCORES = {}
+
 enum HIT_DIRECTIONS {
 	TOP, 
 	BOTTOM,
@@ -37,6 +39,9 @@ const MAX_LIVES = 0
 var LEVEL_FILENAMES
 var LEVEL_NAMES
 var current_level_idx
+#last recorded player score before starting stage
+#used to offset highscore
+var pre_stage_score
 var player_score setget set_player_score
 #are we entering main menu from level
 var coming_from_level
@@ -52,6 +57,7 @@ func _ready():
 	remaining_lives = MAX_LIVES
 	current_level_idx = 0
 	player_score = 000000
+	pre_stage_score = player_score
 	coming_from_level = false
 	load_levels_filenames()
 	load_level_names()
@@ -104,12 +110,23 @@ func load_levels_filenames():
 	else:
 		print("ERROR opening director %s: %s" % [LEVELS_DIR, dir_open])
 		
+func get_stage_highscore(idx = current_level_idx):
+	if (LEVEL_HIGHSCORES.has(idx)):
+		return LEVEL_HIGHSCORES[idx]
+	else:
+		return 0
+
+func tryset_stage_score(score, idx = current_level_idx):
+	if (not LEVEL_HIGHSCORES.has(idx)):
+		LEVEL_HIGHSCORES[idx] = score
+	else:
+		LEVEL_HIGHSCORES[idx] = max(LEVEL_HIGHSCORES[idx], score) 
+		
 func set_player_score(score):
 	player_score = score
 	#skip this part if no more milestones
 	if (LEVEL_UP_MILESTONES.empty()):
 		return
-	print("searching %s in milestones %s" % [player_score, LEVEL_UP_MILESTONES])
 	for milestone in LEVEL_UP_MILESTONES:
 		if (player_score > milestone):
 			#find lives node in stage

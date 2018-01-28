@@ -11,6 +11,8 @@ onready var lives = get_node("lives")
 onready var level_prev_btn = get_node("level_prev")
 onready var level_next_btn = get_node("level_next")
 
+onready var level_highscore = get_node("level_highscore")
+
 onready var stage = preload("res://stages/stage.tscn")
 
 func _ready():
@@ -38,6 +40,9 @@ func to_main_menu():
 	
 func refresh_level_lbl():
 	level_lbl.set_text(G.LEVEL_NAMES[G.current_level_idx])
+
+func refresh_level_highscore():
+	level_highscore.set_score(G.get_stage_highscore())
 	
 func next_stage():
 	G.current_level_idx += 1
@@ -50,6 +55,7 @@ func prev_stage():
 func validate_level_idx():
 	G.current_level_idx = clamp(G.current_level_idx, 0, G.LEVEL_FILENAMES.size() - 1)
 	refresh_level_lbl()
+	refresh_level_highscore()
 	#cycled to first level in selection
 	validate_page_button(
 	level_prev_btn, 
@@ -73,6 +79,8 @@ func validate_page_button(button, disabled_cond, enabled_text):
 
 
 func play():
+	#set prelevel score not ot mess up highscores
+	G.pre_stage_score = G.player_score
 	#keep menu cached in game state after switching to stage
 	get_tree().get_root().add_child(stage.instance())
 	anim.seek(0.0, true)

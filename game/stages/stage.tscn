@@ -74,6 +74,30 @@ margin/top = 15.0
 margin/right = 116.0
 margin/bottom = 45.0
 
+[node name="levelscore" parent="." instance=ExtResource( 4 )]
+
+margin/left = 400.0
+margin/top = 260.0
+margin/right = 584.0
+margin/bottom = 290.0
+
+[node name="highscore" parent="." instance=ExtResource( 4 )]
+
+margin/left = 400.0
+margin/top = 300.0
+margin/right = 584.0
+margin/bottom = 330.0
+
+[node name="score_text" parent="highscore"]
+
+margin/right = 84.0
+text = "HIGHSCORE: "
+
+[node name="score_value" parent="highscore"]
+
+margin/left = 88.0
+margin/right = 136.0
+
 [node name="lives" parent="." instance=ExtResource( 5 )]
 
 anchor/left = 1
@@ -92,9 +116,9 @@ focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
 margin/left = 330.0
-margin/top = 290.0
+margin/top = 200.0
 margin/right = 660.0
-margin/bottom = 340.0
+margin/bottom = 250.0
 custom_fonts/font = ExtResource( 6 )
 text = "CONGRATULATIONS!"
 align = 1
@@ -155,3 +179,5 @@ autoplay = ""
 [connection signal="pressed" from="to_menu_btn" to="." method="_on_to_menu_btn_pressed"]
 
 
+[editable path="levelscore"]
+[editable path="highscore"]
