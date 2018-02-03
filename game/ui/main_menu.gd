@@ -37,7 +37,11 @@ func to_main_menu():
 	anim.play_backwards("to_stage_select")
 	
 func refresh_level_lbl():
-	level_lbl.set_text(G.LEVEL_NAMES[G.current_level_idx])
+	#unnamed level	
+	if (G.current_level_idx >= G.LEVEL_NAMES.size()):
+		level_lbl.set_text("#%s" % (G.current_level_idx + 1))
+	else:
+		level_lbl.set_text(G.LEVEL_NAMES[G.current_level_idx])
 	
 func next_stage():
 	G.current_level_idx += 1

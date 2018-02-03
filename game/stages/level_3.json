@@ -1,0 +1,12 @@
+{
+  "level_name" : "Red Colander",
+  "c_padding" : "3",
+  "r_padding" : "3",
+  "grid" : [ 
+  		[ "R", null, "R", null, "R", null ],
+  	 	[ null, "R", null, "R", null, "R" ], 
+  	 	[ "R", null, "R", null, "R", null ],
+  	  	[ null, "R", null, "R", null, "R" ],
+  	    [ "R", null, "R", null, "R", null ]
+    ]
+}
