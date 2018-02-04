@@ -74,8 +74,9 @@ func finish_stage(message):
 	print(message)
 	#set that we are returning to menu from game level
 	G.coming_from_level = true
-	#set remaining lives if any
-	var num_lives = lives.num_lives
+	#set remaining lives if any 
+	#also adding all active balls - 1 since fist one was free
+	var num_lives = lives.num_lives + get_active_balls_count() - 1
 	if (num_lives > 0):
 		G.remaining_lives = num_lives
 	else:
