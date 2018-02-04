@@ -5,6 +5,8 @@ onready var G = get_node("/root/game_state")
 onready var bricks_grid = get_node("bricks_grid")
 
 onready var score = get_node("score")
+onready var level_score = get_node("levelscore")
+onready var high_score = get_node("highscore")
 onready var lives = get_node("lives")
 
 onready var paddle = get_node("paddle")
@@ -19,6 +21,8 @@ var stage_over
 func _ready():
 	stage_over_text.hide()
 	to_menu_btn.hide()
+	level_score.hide()
+	high_score.hide()
 	stage_over = false
 	
 	stage_title.set_text("level %s:\n%s" % [G.current_level_idx + 1, bricks_grid.level_bricks_map.level_name])
@@ -74,16 +78,21 @@ func finish_stage(message):
 	print(message)
 	#set that we are returning to menu from game level
 	G.coming_from_level = true
-	#set remaining lives if any 
-	#also adding all active balls - 1 since fist one was free
 	var num_lives = lives.num_lives + get_active_balls_count() - 1
 	if (num_lives > 0):
 		G.remaining_lives = num_lives
 	else:
 		G.remaining_lives = G.MAX_LIVES
 	
+	#try recording score that may or may not be highest so far
+	var stage_score = G.player_score - G.pre_stage_score
+	G.tryset_stage_score(stage_score)
+	level_score.set_score(stage_score)
+	high_score.set_score(G.get_stage_highscore())
 	stage_over_text.set_text(message)
 	stage_over_text.show()
+	level_score.show()
+	high_score.show()
 	to_menu_btn.show()
 	#stop paddle and balls
 	paddle.set_process(false)

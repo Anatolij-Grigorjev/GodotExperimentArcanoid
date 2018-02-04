@@ -150,7 +150,7 @@ margin/top = 15.0
 margin/right = 116.0
 margin/bottom = 45.0
 
-[node name="lives_ball" parent="." instance=ExtResource( 3 )]
+[node name="lives" parent="." instance=ExtResource( 3 )]
 
 rect/scale = Vector2( 0.4, 0.4 )
 margin/left = 976.0

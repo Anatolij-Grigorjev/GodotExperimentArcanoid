@@ -118,14 +118,19 @@ func hit_something(border_pos):
 	
 	if (border_pos == G.LEFT or border_pos == G.RIGHT):
 		direction.x *= -1
-		#add a bit of fuzzyness to new direction
-		direction.x = G.make_fuzzy(direction.x)
 	if (border_pos == G.TOP or border_pos == G.BOTTOM):
 		direction.y *= -1
-		#add a bit of fuzzyness to new direction
-		direction.y = G.make_fuzzy(direction.y)
-		
+	if (border_pos == G.L_SLOPE or border_pos == G.R_SLOPE):
+		#sloped direction half n half?
+#		direction.x *= -0.5
+		direction.y *= -0.5
+	#add a bit of fuzzyness to new x direction
+	direction.x = G.make_fuzzy(direction.x)
+	#add a bit of fuzzyness to new y direction
+	direction.y = G.make_fuzzy(direction.y)
+	
 	direction = direction.normalized()
+
 
 func increase_speed():
 	#if the ball is at its highest speed already, leave it at that

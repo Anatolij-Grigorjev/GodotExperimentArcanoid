@@ -15,12 +15,21 @@ const COLOR_TO_IDX = {
 	"W": 1, 
 	"B": 2
 }
+const LEVEL_UP_MILESTONES = [
+	500,
+	1000,
+	1500
+]
+
+var LEVEL_HIGHSCORES = {}
 
 enum HIT_DIRECTIONS {
 	TOP, 
 	BOTTOM,
 	LEFT, 
-	RIGHT
+	RIGHT,
+	L_SLOPE,
+	R_SLOPE
 }
 const LEVELS_DIR = "res://stages"
 const LEVEL_NAMES_FILE = "res://menus/level_names.json"
@@ -30,7 +39,10 @@ const MAX_LIVES = 5
 var LEVEL_FILENAMES
 var LEVEL_NAMES
 var current_level_idx
-var player_score
+#last recorded player score before starting stage
+#used to offset highscore
+var pre_stage_score
+var player_score setget set_player_score
 #are we entering main menu from level
 var coming_from_level
 
@@ -40,9 +52,12 @@ var remaining_lives
 var menu_node
 
 func _ready():
+	#sort level up milestones in ascending order just in case
+	LEVEL_UP_MILESTONES.sort()
 	remaining_lives = MAX_LIVES
 	current_level_idx = 0
 	player_score = 000000
+	pre_stage_score = player_score
 	coming_from_level = false
 	load_levels_filenames()
 	load_level_names()
@@ -94,7 +109,33 @@ func load_levels_filenames():
 		print("LEVEL_FILENAMES discovered: %s" % [LEVEL_FILENAMES])
 	else:
 		print("ERROR opening director %s: %s" % [LEVELS_DIR, dir_open])
-	
+		
+func get_stage_highscore(idx = current_level_idx):
+	if (LEVEL_HIGHSCORES.has(idx)):
+		return LEVEL_HIGHSCORES[idx]
+	else:
+		return 0
+
+func tryset_stage_score(score, idx = current_level_idx):
+	if (not LEVEL_HIGHSCORES.has(idx)):
+		LEVEL_HIGHSCORES[idx] = score
+	else:
+		LEVEL_HIGHSCORES[idx] = max(LEVEL_HIGHSCORES[idx], score) 
+		
+func set_player_score(score):
+	player_score = score
+	#skip this part if no more milestones
+	if (LEVEL_UP_MILESTONES.empty()):
+		return
+	for milestone in LEVEL_UP_MILESTONES:
+		if (player_score > milestone):
+			#find lives node in stage
+			var lives = get_node("/root/stage/lives")
+			if (lives != null):
+				lives.add_life()
+			LEVEL_UP_MILESTONES.pop_front()
+			return
+	return
 	
 func get_sprite_extents( sprite ):
 	var tex = sprite.get_texture()
