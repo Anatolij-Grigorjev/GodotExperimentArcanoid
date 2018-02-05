@@ -1,0 +1,6 @@
+{
+  "level_name" : "TEST2",
+  "c_padding" : "25",
+  "r_padding" : "25",
+  "grid" : [ [ "R", null, "B" ], [ null, "W", null ], [ "B", null, "R" ] ]
+}
