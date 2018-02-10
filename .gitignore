@@ -1,3 +1,6 @@
 
 #ignore engine cache file
 game/.fscache
+
+#ignore Thumbs.db
+Thumbs.db

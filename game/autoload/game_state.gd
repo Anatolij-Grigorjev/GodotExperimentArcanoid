@@ -23,14 +23,15 @@ const LEVEL_UP_MILESTONES = [
 
 var LEVEL_HIGHSCORES = {}
 
-enum HIT_DIRECTIONS {
-	TOP, 
-	BOTTOM,
-	LEFT, 
-	RIGHT,
-	L_SLOPE,
-	R_SLOPE
-}
+
+
+const TOP = 50
+const BOTTOM = 51
+const LEFT = 52
+const RIGHT = 53
+const L_SLOPE = 54
+const R_SLOPE = 55
+
 const LEVELS_DIR = "res://stages"
 const LEVEL_NAMES_FILE = "res://menus/level_names.json"
 const LEVELS_NAME_PATTERN = "level_"
