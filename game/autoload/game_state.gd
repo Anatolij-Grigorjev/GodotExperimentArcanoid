@@ -35,6 +35,7 @@ const R_SLOPE = 55
 const LEVELS_DIR = "res://stages"
 const LEVEL_NAMES_FILE = "res://menus/level_names.json"
 const LEVELS_NAME_PATTERN = "level_"
+const HIGHSCORES_PATH = "user://high_scores.json"
 const MAX_LIVES = 5
 
 var LEVEL_FILENAMES
@@ -62,6 +63,18 @@ func _ready():
 	coming_from_level = false
 	load_levels_filenames()
 	load_level_names()
+	load_level_highscores()
+	
+func load_level_highscores():
+	print("Fetching HIGHSCPRES from %s" % HIGHSCORES_PATH)
+	var scores_json = get_file_text(HIGHSCORES_PATH)
+	var scores_map = {}
+	scores_map.parse_json(scores_json)
+	#since in json the keys are strings and here they need to 
+	#be integers, we recast all the dic elements
+	for s_idx in scores_map:
+		LEVEL_HIGHSCORES[int(s_idx)] = scores_map[s_idx]
+	print("fetched highscores: %s" % LEVEL_HIGHSCORES)
 	
 func load_level_names():
 	LEVEL_NAMES = []
@@ -118,10 +131,25 @@ func get_stage_highscore(idx = current_level_idx):
 		return 0
 
 func tryset_stage_score(score, idx = current_level_idx):
+	var score_changed = false
 	if (not LEVEL_HIGHSCORES.has(idx)):
 		LEVEL_HIGHSCORES[idx] = score
+		score_changed = true
 	else:
-		LEVEL_HIGHSCORES[idx] = max(LEVEL_HIGHSCORES[idx], score) 
+		var prev_score = LEVEL_HIGHSCORES[idx]
+		LEVEL_HIGHSCORES[idx] = max(prev_score, score) 
+		score_changed = prev_score < score
+	if (score_changed):
+		var scores_file = File.new()
+		var err = scores_file.open(HIGHSCORES_PATH, File.WRITE)
+		if (err == OK):
+			var json = LEVEL_HIGHSCORES.to_json()
+			scores_file.store_string(json)
+			scores_file.close()
+		else:
+			print("Write HIGHSCORE ERROR CODE: %s" % err)
+		
+		
 		
 func set_player_score(score):
 	player_score = score
@@ -163,4 +191,4 @@ func get_file_text(filename):
 		file.close()
 		return text
 	else:
-		print("Error opening level file %s: %s" % [filename, err])
+		print("Error opening file %s: %s" % [filename, err])

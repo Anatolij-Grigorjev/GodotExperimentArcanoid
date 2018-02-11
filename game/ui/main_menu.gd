@@ -11,7 +11,7 @@ onready var lives = get_node("lives")
 onready var level_prev_btn = get_node("level_prev")
 onready var level_next_btn = get_node("level_next")
 
-onready var level_highscore = get_node("score")
+onready var level_highscore = get_node("level_highscore")
 
 onready var stage = preload("res://stages/stage.tscn")
 
@@ -22,6 +22,7 @@ func _ready():
 		anim.seek(MENU_ANIMATION_LENGTH, true)
 		#reset coming from level
 		G.coming_from_level = false
+		
 	lives.set_num_lives(G.remaining_lives)
 	validate_level_idx()
 	for node in get_children():

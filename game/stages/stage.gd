@@ -51,6 +51,13 @@ func has_bricks_left():
 func check_stage_over( brick_val ):
 	var bricks = has_bricks_left()
 	if (not bricks):
+		#wait a bit before finish to let score catch up
+		var t = Timer.new()
+		t.set_wait_time(0.25)
+		t.set_one_shot(true)
+		self.add_child(t)
+		t.start()
+		yield(t, "timeout")
 		finish_stage("CONGRATULATIONS!")
 	
 func do_no_lives():
