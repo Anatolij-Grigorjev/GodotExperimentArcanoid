@@ -67,10 +67,18 @@ func _ready():
 	
 func load_savegame():
 	print("Fetching savegame from %s" % SAVEGAME_PATH)
-	var scores_json = get_file_text(SAVEGAME_PATH)
+	var save_json = get_file_text(SAVEGAME_PATH)
 	var save_map = {}
-	save_map.parse_json(scores_json)
-	print("Fetched savegame data: %s" % save_map)
+	if (save_json != null):
+		save_map.parse_json(save_json)
+		print("Fetched savegame data: %s" % save_map)
+	else:
+		save_map = {
+			"lives": MAX_LIVES,
+			"score" : 0,
+			"high_scores": LEVEL_HIGHSCORES
+		}
+		print("Using default player data: %s" % save_map)
 	#set attributes
 	remaining_lives = save_map.lives
 	player_score = save_map.score
@@ -158,9 +166,9 @@ func save_game():
 	var err = save_file.open(SAVEGAME_PATH, File.WRITE)
 	if (err == OK):
 		var json = {
-			lives: remaining_lives,
-			score: player_score,
-			high_scores: LEVEL_HIGHSCORES
+			"lives": remaining_lives,
+			"score": player_score,
+			"high_scores": LEVEL_HIGHSCORES
 		}.to_json()
 		save_file.store_string(json)
 		save_file.close()
