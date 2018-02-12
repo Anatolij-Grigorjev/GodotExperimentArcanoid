@@ -35,7 +35,7 @@ const R_SLOPE = 55
 const LEVELS_DIR = "res://stages"
 const LEVEL_NAMES_FILE = "res://menus/level_names.json"
 const LEVELS_NAME_PATTERN = "level_"
-const HIGHSCORES_PATH = "user://high_scores.json"
+const SAVEGAME_PATH = "user://savegame.json"
 const MAX_LIVES = 5
 
 var LEVEL_FILENAMES
@@ -48,7 +48,7 @@ var player_score setget set_player_score
 #are we entering main menu from level
 var coming_from_level
 
-var remaining_lives
+var remaining_lives setget set_remain_lives
 
 #variable to store menu node after the player moved on to a game screen
 var menu_node
@@ -63,18 +63,23 @@ func _ready():
 	coming_from_level = false
 	load_levels_filenames()
 	load_level_names()
-	load_level_highscores()
+	load_savegame()
 	
-func load_level_highscores():
-	print("Fetching HIGHSCPRES from %s" % HIGHSCORES_PATH)
-	var scores_json = get_file_text(HIGHSCORES_PATH)
-	var scores_map = {}
-	scores_map.parse_json(scores_json)
+func load_savegame():
+	print("Fetching savegame from %s" % SAVEGAME_PATH)
+	var scores_json = get_file_text(SAVEGAME_PATH)
+	var save_map = {}
+	save_map.parse_json(scores_json)
+	print("Fetched savegame data: %s" % save_map)
+	#set attributes
+	remaining_lives = save_map.lives
+	player_score = save_map.score
 	#since in json the keys are strings and here they need to 
 	#be integers, we recast all the dic elements
+	var scores_map = save_map.high_scores
 	for s_idx in scores_map:
 		LEVEL_HIGHSCORES[int(s_idx)] = scores_map[s_idx]
-	print("fetched highscores: %s" % LEVEL_HIGHSCORES)
+
 	
 func load_level_names():
 	LEVEL_NAMES = []
@@ -140,31 +145,44 @@ func tryset_stage_score(score, idx = current_level_idx):
 		LEVEL_HIGHSCORES[idx] = max(prev_score, score) 
 		score_changed = prev_score < score
 	if (score_changed):
-		var scores_file = File.new()
-		var err = scores_file.open(HIGHSCORES_PATH, File.WRITE)
-		if (err == OK):
-			var json = LEVEL_HIGHSCORES.to_json()
-			scores_file.store_string(json)
-			scores_file.close()
-		else:
-			print("Write HIGHSCORE ERROR CODE: %s" % err)
+		save_game()
+
+func set_remain_lives(lives):
+	if (lives != remaining_lives):
+		remaining_lives = lives
+		save_game()
+
 		
+func save_game():
+	var save_file = File.new()
+	var err = save_file.open(SAVEGAME_PATH, File.WRITE)
+	if (err == OK):
+		var json = {
+			lives: remaining_lives,
+			score: player_score,
+			high_scores: LEVEL_HIGHSCORES
+		}.to_json()
+		save_file.store_string(json)
+		save_file.close()
+	else:
+		print("Error saving game: %s" % err)
 		
 		
 func set_player_score(score):
-	player_score = score
-	#skip this part if no more milestones
-	if (LEVEL_UP_MILESTONES.empty()):
-		return
-	for milestone in LEVEL_UP_MILESTONES:
-		if (player_score > milestone):
-			#find lives node in stage
-			var lives = get_node("/root/stage/lives")
-			if (lives != null):
-				lives.add_life()
-			LEVEL_UP_MILESTONES.pop_front()
-			return
-	return
+	if (player_score != score): 
+		player_score = score
+		#skip this part if no more milestones
+		if (not LEVEL_UP_MILESTONES.empty()):
+			for milestone in LEVEL_UP_MILESTONES:
+				if (player_score > milestone):
+					#find lives node in stage
+					var lives = get_node("/root/stage/lives")
+					if (lives != null):
+						lives.add_life()
+					LEVEL_UP_MILESTONES.pop_front()
+					break
+		save_game()
+
 	
 func get_sprite_extents( sprite ):
 	var tex = sprite.get_texture()

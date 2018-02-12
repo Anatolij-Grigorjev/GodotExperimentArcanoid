@@ -84,12 +84,13 @@ func get_active_balls_count():
 func finish_stage(message):
 	print(message)
 	#set that we are returning to menu from game level
-	G.coming_from_level = true
 	var num_lives = lives.num_lives + get_active_balls_count() - 1
 	if (num_lives > 0):
 		G.remaining_lives = num_lives
+		G.coming_from_level = true
 	else:
 		G.remaining_lives = G.MAX_LIVES
+		G.coming_from_level = false
 	
 	#try recording score that may or may not be highest so far
 	var stage_score = G.player_score - G.pre_stage_score
